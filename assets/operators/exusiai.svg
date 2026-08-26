@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" role="img" aria-label="Abstract red winged operator placeholder">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#271333"/><stop offset=".55" stop-color="#a3254b"/><stop offset="1" stop-color="#f3a75b"/></linearGradient><radialGradient id="halo"><stop stop-color="#ffe3a2" stop-opacity=".92"/><stop offset="1" stop-color="#ffe3a2" stop-opacity="0"/></radialGradient></defs>
+  <rect width="900" height="720" fill="url(#sky)"/><circle cx="610" cy="180" r="200" fill="url(#halo)"/>
+  <path d="M0 680 180 420l145 120 140-310 115 310 120-185L900 540v180H0Z" fill="#150d24" opacity=".72"/><path d="M470 545c-130-112-144-268-90-387 23 93 75 130 112 144-20-122 55-230 160-269-69 86-66 179-42 238 38-75 107-100 167-91-76 74-94 168-47 275-84 89-177 115-260 90Z" fill="#f5dbc1" opacity=".93"/><path d="M355 520c60-140 135-220 254-284-40 83-48 168-23 256-91 21-167 34-231 28Z" fill="#401634" opacity=".8"/><path d="m260 632 176-200 75 76 82-192 83 181 120 27-105 108Z" fill="none" stroke="#ffd991" stroke-width="12" opacity=".9"/>
+</svg>

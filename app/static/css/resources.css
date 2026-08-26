@@ -1,0 +1,6 @@
+.cost.lmd::before { background: #d5ac55; }
+.cost.intelligence::before { background: #7487b8; }
+.cost.logistics::before { background: #8ca970; }
+.cost.medical::before { background: #d67d86; }
+.cost.arts::before { background: #9d80b5; }
+.cost.originium::before { background: #202229; box-shadow: inset 0 0 0 5px #ce5e55; }

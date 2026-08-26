@@ -1,0 +1,2 @@
+"""Arknights card generator application."""
+

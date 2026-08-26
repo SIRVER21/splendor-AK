@@ -1,0 +1,16 @@
+{
+  "id": "op_001",
+  "name": "Exusiai",
+  "tier": 1,
+  "operator_class": "Sniper",
+  "influence": 1,
+  "artwork": "assets/operators/exusiai.svg",
+  "cost": {
+    "lmd": 2,
+    "intelligence": 0,
+    "logistics": 1,
+    "medical": 0,
+    "arts": 0,
+    "originium": 0
+  }
+}

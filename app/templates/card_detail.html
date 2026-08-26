@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ card.name }} · Arknights Card Generator{% endblock %}
+{% block body %}
+<main class="workspace">
+  <section class="intro">
+    <p class="eyebrow">FIRST MILESTONE · HTML → PNG</p>
+    <h1>{{ card.name }}</h1>
+    <p class="subtle">{{ card.id }} · Tier {{ card.tier }} · {{ card.operator_class }}</p>
+    <section class="card-data" aria-label="Card JSON data">
+      <h2>Card data</h2>
+      <dl class="metadata">
+        <div><dt>ID</dt><dd>{{ card.id }}</dd></div>
+        <div><dt>Name</dt><dd>{{ card.name }}</dd></div>
+        <div><dt>Tier</dt><dd>{{ card.tier }}</dd></div>
+        <div><dt>Class</dt><dd>{{ card.operator_class }}</dd></div>
+        <div><dt>Influence</dt><dd>{{ card.influence }}</dd></div>
+        <div><dt>Artwork</dt><dd>{{ card.artwork }}</dd></div>
+        {% for resource, label, amount in card.resource_costs %}
+          <div class="resource-row"><dt>{{ label }}</dt><dd>{{ amount }}</dd></div>
+        {% endfor %}
+      </dl>
+    </section>
+    {% if png_exists %}
+      <p class="status success">● PNG generated</p>
+      <a class="secondary-action" href="/generated/{{ card.id }}.png" target="_blank">Open generated PNG</a>
+    {% else %}
+      <p class="status pending">● PNG not generated</p>
+    {% endif %}
+    <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if png_exists %}Regenerate PNG{% else %}Generate PNG{% endif %}</button></form>
+    <p class="hint">Preview below is live HTML/CSS. It does not create a file.</p>
+  </section>
+  <section class="preview-panel">
+    <div class="preview-label">LIVE PREVIEW · 63.5 × 88 mm proportion</div>
+    <div class="card-viewport"><iframe title="{{ card.name }} card preview" src="/render/{{ card.id }}"></iframe></div>
+  </section>
+</main>
+{% endblock %}
