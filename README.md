@@ -25,11 +25,13 @@ Każda karta jest osobnym plikiem w `cards/`. Pierwszy etap obsługuje następuj
   "operator_class": "Sniper",
   "influence": 1,
   "artwork": "assets/operators/exusiai.svg",
-  "cost": { "lmd": 2, "intelligence": 0, "logistics": 1, "medical": 0, "arts": 0, "originium": 0 }
+  "rhodes_island_emblems": 0,
+  "originium_bonus": 0,
+  "cost": { "lmd": 2, "intelligence": 0, "logistics": 1, "medical": 0, "arts": 0 }
 }
 ```
 
-`tier` ma zakres 1–3, `influence` i wszystkie koszty nie mogą być ujemne, a wskazany artwork musi istnieć. Koszty o wartości `0` nie są wyświetlane. `Originium` występuje tylko na kartach Tier 3 i każda karta Tier 3 musi mieć przynajmniej 1 Originium.
+`tier` ma zakres 1–3, `influence` i wszystkie koszty nie mogą być ujemne, a wskazany artwork musi istnieć. Koszty o wartości `0` nie są wyświetlane. `Originium` nie jest walutą: `originium_bonus` ma wartość `1` na każdej karcie Tier 3 i `0` na pozostałych.
 
 ## Następny etap
 

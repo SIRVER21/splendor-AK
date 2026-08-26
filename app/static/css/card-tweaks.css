@@ -1,0 +1,7 @@
+.tier-mark { position: absolute; z-index: 3; top: 38px; left: 40px; display: flex; align-items: flex-end; gap: 8px; height: 82px; padding: 7px 14px 8px 10px; color: #f8e3bd; border-left: 3px solid #f8e3bd; border-bottom: 2px solid #f8e3bd; background: linear-gradient(90deg, #2115289c, transparent); }
+.tier-mark::after { content: ""; position: absolute; left: -3px; bottom: -9px; width: 43px; height: 3px; background: #e68563; }.tier-mark span { margin: 0 0 7px; font: 500 12px "DM Mono", monospace; letter-spacing: 3px; opacity: .78; }.tier-mark b { font: 600 66px/.77 Outfit, sans-serif; letter-spacing: -5px; text-shadow: 2px 2px 0 #6f3340; }
+.emblems { position: absolute; top: 145px; left: 40px; z-index: 3; display: flex; align-items: center; gap: 7px; height: 53px; padding: 4px 8px; border: 2px solid #f8e3bd; background: #261733a8; }.emblems img { width: 41px; height: 41px; }
+.originium-bg { position: absolute; z-index: 0; top: 138px; right: 20px; width: 420px; height: 420px; background: url("/assets/backgrounds/originium.png") center/contain no-repeat; opacity: .16; mix-blend-mode: screen; filter: saturate(.7) contrast(1.1); pointer-events: none; }
+.card footer { padding-top: 117px; }
+.cost { min-width: 52px; justify-content: center; padding: 0 12px 0 7px; }
+.cost b { min-width: 14px; text-align: center; }

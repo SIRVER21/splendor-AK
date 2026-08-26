@@ -48,6 +48,16 @@ async def generate_card(request: Request, card_id: str) -> RedirectResponse:
     return RedirectResponse(url=f"/card/{card.id}", status_code=303)
 
 
+@app.put("/api/card/{card_id}")
+async def update_card(card_id: str, request: Request) -> dict:
+    try:
+        payload = await request.json()
+        card = loader.save(card_id, payload)
+    except (CardLoadError, ValueError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return {"message": "Card saved. Generate PNG manually to update the image.", "card": card.model_dump()}
+
+
 @app.get("/generated/{card_id}.png", include_in_schema=False)
 async def generated_image(card_id: str) -> FileResponse:
     output_path = GENERATED_DIR / f"{card_id}.png"

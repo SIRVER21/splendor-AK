@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8"><link rel="stylesheet" href="{{ url_for('static', path='css/card.css') }}"><link rel="stylesheet" href="{{ url_for('static', path='css/resources.css') }}"></head>
+  <head><meta charset="utf-8"><link rel="stylesheet" href="{{ url_for('static', path='css/card.css') }}"><link rel="stylesheet" href="{{ url_for('static', path='css/resources.css') }}"><link rel="stylesheet" href="{{ url_for('static', path='css/card-tweaks.css') }}"></head>
   <body>
     <article class="card tier-{{ card.tier }}">
       <div class="art"><img src="/{{ card.artwork }}" alt="Artwork for {{ card.name }}"></div>
+      {% if card.tier == 3 %}<div class="originium-bg" aria-hidden="true"></div>{% endif %}
       <div class="mist"></div>
-      <header><span>RHODES ISLAND</span><strong>TIER {{ card.tier }}</strong></header>
+      <div class="tier-mark"><span>TIER</span><b>{{ card.roman_tier }}</b></div>
       <div class="influence"><small>INF</small><b>{{ card.influence }}</b></div>
-      <div class="operator-mark">{{ card.operator_class[:1] }}</div>
+      {% if card.rhodes_island_emblems %}<div class="emblems" aria-label="{{ card.rhodes_island_emblems }} Rhodes Island Emblems">{% for _ in range(card.rhodes_island_emblems) %}<img src="/assets/icons/rhodes-island-emblem.svg" alt="">{% endfor %}</div>{% endif %}
       <footer>
         <p class="class-name">{{ card.operator_class }}</p><h1>{{ card.name }}</h1>
-        <div class="costs">{% for resource, label, amount in card.active_costs %}<div class="cost {{ resource }}"><span>{{ label }}</span><b>{{ amount }}</b></div>{% endfor %}</div>
+        <div class="costs">{% for resource, label, amount in card.active_costs %}<div class="cost {{ resource }}" title="{{ label }}"><b>{{ amount }}</b></div>{% endfor %}</div>
       </footer>
     </article>
   </body>

@@ -36,3 +36,19 @@ class CardLoader:
             raise CardLoadError(f"Artwork does not exist: {card.artwork}")
         return card
 
+    def save(self, card_id: str, payload: dict) -> Card:
+        """Validate and persist user-edited JSON while keeping filename and id aligned."""
+        payload["id"] = card_id
+        try:
+            card = Card.model_validate(payload)
+        except ValidationError as error:
+            messages = "; ".join(
+                f"{'.'.join(str(part) for part in item['loc'])}: {item['msg']}"
+                for item in error.errors()
+            )
+            raise CardLoadError(f"Invalid card data: {messages}") from error
+        if not (self.project_root / card.artwork).is_file():
+            raise CardLoadError(f"Artwork does not exist: {card.artwork}")
+        path = self.cards_dir / f"{card_id}.json"
+        path.write_text(json.dumps(card.model_dump(), indent=2) + "\n", encoding="utf-8")
+        return card
