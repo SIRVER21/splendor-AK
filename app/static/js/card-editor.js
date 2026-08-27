@@ -1,6 +1,29 @@
 const editor = document.querySelector("#card-editor");
 
 if (editor) {
+  const preview = document.querySelector(".preview-panel iframe");
+  const resources = ["lmd", "intelligence", "logistics", "medical", "arts"];
+  const resourceLabels = {
+    lmd: "LMD",
+    intelligence: "Intelligence",
+    logistics: "Logistics",
+    medical: "Medical",
+    arts: "Arts",
+  };
+
+  const syncPreviewAccent = () => {
+    const card = preview?.contentDocument?.querySelector(".card");
+    if (!card) return;
+    const resource = editor.elements.resource_type.value;
+    card.classList.remove(...resources.map((name) => `resource-${name}`));
+    card.classList.add(`resource-${resource}`);
+    const affinity = card.querySelector(".resource-affinity");
+    if (affinity) affinity.textContent = resourceLabels[resource] ?? resource;
+  };
+
+  editor.elements.resource_type.addEventListener("change", syncPreviewAccent);
+  preview?.addEventListener("load", syncPreviewAccent);
+
   editor.addEventListener("submit", async (event) => {
     event.preventDefault();
     const number = (name) => Number(editor.elements[name].value);
@@ -10,8 +33,8 @@ if (editor) {
       operator_class: editor.elements.operator_class.value,
       influence: number("influence"),
       artwork: editor.elements.artwork.value,
+      resource_type: editor.elements.resource_type.value,
       rhodes_island_emblems: number("rhodes_island_emblems"),
-      originium_bonus: number("originium_bonus"),
       cost: {
         lmd: number("cost_lmd"), intelligence: number("cost_intelligence"),
         logistics: number("cost_logistics"), medical: number("cost_medical"), arts: number("cost_arts"),

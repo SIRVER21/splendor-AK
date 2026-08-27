@@ -25,13 +25,13 @@ Każda karta jest osobnym plikiem w `cards/`. Pierwszy etap obsługuje następuj
   "operator_class": "Sniper",
   "influence": 1,
   "artwork": "assets/operators/exusiai.svg",
+  "resource_type": "intelligence",
   "rhodes_island_emblems": 0,
-  "originium_bonus": 0,
   "cost": { "lmd": 2, "intelligence": 0, "logistics": 1, "medical": 0, "arts": 0 }
 }
 ```
 
-`tier` ma zakres 1–3, `influence` i wszystkie koszty nie mogą być ujemne, a wskazany artwork musi istnieć. Koszty o wartości `0` nie są wyświetlane. `Originium` nie jest walutą: `originium_bonus` ma wartość `1` na każdej karcie Tier 3 i `0` na pozostałych.
+`tier` ma zakres 1–3, `influence` i wszystkie koszty nie mogą być ujemne, a wskazany artwork musi istnieć. Koszty o wartości `0` nie są wyświetlane. `resource_type` to niezależny materiał/operator accent i może być jednym z: `lmd`, `intelligence`, `logistics`, `medical`, `arts`. `Originium` nie jest walutą ani edytowalnym kosztem: jest automatycznym elementem designu każdej karty Tier 3 i tylko Tier 3.
 
 ## Następny etap
 

@@ -14,6 +14,8 @@
         <div><dt>Tier</dt><dd>{{ card.tier }}</dd></div>
         <div><dt>Class</dt><dd>{{ card.operator_class }}</dd></div>
         <div><dt>Influence</dt><dd>{{ card.influence }}</dd></div>
+        <div><dt>Operator material</dt><dd>{{ card.resource_type_label }}</dd></div>
+        <div><dt>Originium</dt><dd>{% if card.tier == 3 %}Automatic Tier 3 design bonus{% else %}None{% endif %}</dd></div>
         <div><dt>Artwork</dt><dd>{{ card.artwork }}</dd></div>
         {% for resource, label, amount in card.resource_costs %}
           <div class="resource-row"><dt>{{ label }}</dt><dd>{{ amount }}</dd></div>
@@ -27,9 +29,9 @@
         <label>Tier<select name="tier"><option value="1" {% if card.tier == 1 %}selected{% endif %}>1</option><option value="2" {% if card.tier == 2 %}selected{% endif %}>2</option><option value="3" {% if card.tier == 3 %}selected{% endif %}>3</option></select></label>
         <label>Class<input name="operator_class" value="{{ card.operator_class }}" required></label>
         <label>Influence<input name="influence" type="number" min="0" value="{{ card.influence }}" required></label>
+        <label>Operator material<select name="resource_type">{% for resource, label, amount in card.resource_costs %}<option value="{{ resource }}" {% if card.resource_type == resource %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
         <label>Artwork path<input name="artwork" value="{{ card.artwork }}" required></label>
         <label>RI Emblems (0–2)<input name="rhodes_island_emblems" type="number" min="0" max="2" value="{{ card.rhodes_island_emblems }}" required></label>
-        <label>Originium bonus<input name="originium_bonus" type="number" min="0" max="1" value="{{ card.originium_bonus }}" required></label>
         <fieldset><legend>Costs</legend>{% for resource, label, amount in card.resource_costs %}<label>{{ label }}<input name="cost_{{ resource }}" type="number" min="0" value="{{ amount }}" required></label>{% endfor %}</fieldset>
         <button type="submit">Save data</button><p class="save-message" aria-live="polite"></p>
       </form>

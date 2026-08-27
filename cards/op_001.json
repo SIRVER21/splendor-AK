@@ -5,8 +5,8 @@
   "operator_class": "Sniper",
   "influence": 0,
   "artwork": "assets/operators/exusiai.svg",
+  "resource_type": "logistics",
   "rhodes_island_emblems": 0,
-  "originium_bonus": 1,
   "cost": {
     "lmd": 2,
     "intelligence": 1,

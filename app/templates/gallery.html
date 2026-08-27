@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Gallery · Arknights Card Generator{% endblock %}
+{% block body %}
+<main class="gallery-shell">
+  <section class="gallery-header">
+    <div>
+      <p class="eyebrow">CARD GALLERY</p>
+      <h1>Generated cards</h1>
+      <p class="subtle">Browse JSON cards, search by ID or name, and render only the PNG files you choose.</p>
+    </div>
+    <form action="/generate-missing" method="post"><button type="submit">Generate all missing</button></form>
+  </section>
+
+  <label class="search-box">Search<input id="gallery-search" type="search" placeholder="Exusiai or op_001" autocomplete="off"></label>
+
+  <section class="gallery-grid" aria-label="Cards">
+    {% for item in cards %}
+      {% set card = item.card %}
+      <article class="gallery-card resource-{{ card.resource_type }}" data-card-id="{{ card.id }}" data-card-name="{{ card.name | lower }}">
+        <a class="gallery-preview" href="/card/{{ card.id }}" aria-label="Open {{ card.name }}">
+          {% if item.png_exists %}
+            <img src="{{ item.png_url }}" alt="{{ card.name }} generated card">
+          {% else %}
+            <div class="missing-card">
+              <span>{{ card.roman_tier }}</span>
+              <strong>Not generated</strong>
+            </div>
+          {% endif %}
+        </a>
+        <div class="gallery-meta">
+          <p class="class-name">{{ card.operator_class }}</p>
+          <h2>{{ card.name }}</h2>
+          <p class="subtle">{{ card.id }} · Tier {{ card.tier }} · {{ card.resource_type_label }}</p>
+        </div>
+        <div class="gallery-actions">
+          <a class="secondary-action" href="/card/{{ card.id }}">Edit</a>
+          <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if item.png_exists %}Regenerate{% else %}Generate{% endif %}</button></form>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <p class="empty-gallery" hidden>No cards match the search.</p>
+</main>
+<script src="{{ url_for('static', path='js/gallery.js') }}"></script>
+{% endblock %}

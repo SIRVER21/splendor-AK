@@ -1,6 +1,11 @@
+.card.resource-lmd { --accent: #d5ac55; --accent-dark: #6f4d20; --accent-soft: rgba(213, 172, 85, .24); }
+.card.resource-intelligence { --accent: #7487b8; --accent-dark: #2f3f75; --accent-soft: rgba(116, 135, 184, .26); }
+.card.resource-logistics { --accent: #8ca970; --accent-dark: #405b36; --accent-soft: rgba(140, 169, 112, .25); }
+.card.resource-medical { --accent: #d67d86; --accent-dark: #73313f; --accent-soft: rgba(214, 125, 134, .24); }
+.card.resource-arts { --accent: #9d80b5; --accent-dark: #49335f; --accent-soft: rgba(157, 128, 181, .27); }
+
 .cost.lmd::before { background: #d5ac55; }
 .cost.intelligence::before { background: #7487b8; }
 .cost.logistics::before { background: #8ca970; }
 .cost.medical::before { background: #d67d86; }
 .cost.arts::before { background: #9d80b5; }
-.cost.originium::before { background: #202229; box-shadow: inset 0 0 0 5px #ce5e55; }

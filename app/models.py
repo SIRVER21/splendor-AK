@@ -1,6 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 ResourceAmount = Annotated[int, Field(ge=0)]
@@ -11,6 +11,7 @@ RESOURCE_LABELS = {
     "medical": "Medical",
     "arts": "Arts",
 }
+ResourceType = Literal["lmd", "intelligence", "logistics", "medical", "arts"]
 
 
 class Cost(BaseModel):
@@ -32,8 +33,8 @@ class Card(BaseModel):
     operator_class: Annotated[str, Field(min_length=1, max_length=40)]
     influence: Annotated[int, Field(ge=0)]
     artwork: Annotated[str, Field(min_length=1)]
+    resource_type: ResourceType = "lmd"
     rhodes_island_emblems: Annotated[int, Field(ge=0, le=2)] = 0
-    originium_bonus: Annotated[int, Field(ge=0, le=1)] = 0
     cost: Cost
 
     @field_validator("name", "operator_class")
@@ -44,14 +45,6 @@ class Card(BaseModel):
             raise ValueError("must not be blank")
         return value
 
-    @model_validator(mode="after")
-    def validate_originium(self) -> "Card":
-        if self.tier == 3 and self.originium_bonus != 1:
-            raise ValueError("Tier 3 cards grant exactly 1 Originium bonus.")
-        if self.tier != 3 and self.originium_bonus != 0:
-            raise ValueError("Originium bonus is granted only by Tier 3 cards.")
-        return self
-
     @property
     def active_costs(self) -> list[tuple[str, str, int]]:
         return [(resource, RESOURCE_LABELS[resource], amount) for resource, amount in self.cost.model_dump().items() if amount]
@@ -59,6 +52,10 @@ class Card(BaseModel):
     @property
     def resource_costs(self) -> list[tuple[str, str, int]]:
         return [(resource, RESOURCE_LABELS[resource], amount) for resource, amount in self.cost.model_dump().items()]
+
+    @property
+    def resource_type_label(self) -> str:
+        return RESOURCE_LABELS[self.resource_type]
 
     @property
     def roman_tier(self) -> str:

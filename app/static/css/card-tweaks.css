@@ -1,7 +1,22 @@
-.tier-mark { position: absolute; z-index: 3; top: 38px; left: 40px; display: flex; align-items: flex-end; gap: 8px; height: 82px; padding: 7px 14px 8px 10px; color: #f8e3bd; border-left: 3px solid #f8e3bd; border-bottom: 2px solid #f8e3bd; background: linear-gradient(90deg, #2115289c, transparent); }
-.tier-mark::after { content: ""; position: absolute; left: -3px; bottom: -9px; width: 43px; height: 3px; background: #e68563; }.tier-mark span { margin: 0 0 7px; font: 500 12px "DM Mono", monospace; letter-spacing: 3px; opacity: .78; }.tier-mark b { font: 600 66px/.77 Outfit, sans-serif; letter-spacing: -5px; text-shadow: 2px 2px 0 #6f3340; }
-.emblems { position: absolute; top: 145px; left: 40px; z-index: 3; display: flex; align-items: center; gap: 7px; height: 53px; padding: 4px 8px; border: 2px solid #f8e3bd; background: #261733a8; }.emblems img { width: 41px; height: 41px; }
-.originium-bg { position: absolute; z-index: 0; top: 138px; right: 20px; width: 420px; height: 420px; background: url("/assets/backgrounds/originium.png") center/contain no-repeat; opacity: .16; mix-blend-mode: screen; filter: saturate(.7) contrast(1.1); pointer-events: none; }
-.card footer { padding-top: 117px; }
+.card { --accent: #d5ac55; --accent-dark: #6f4d20; --accent-soft: rgba(213, 172, 85, .24); border-color: #e7decb; }
+.card::before { content: ""; position: absolute; inset: 23px; z-index: 3; pointer-events: none; border: 2px solid color-mix(in srgb, var(--accent) 72%, #f7eee0); opacity: .78; clip-path: polygon(0 0, 38% 0, 38% 2px, 64% 2px, 64% 0, 100% 0, 100% 100%, 0 100%); }
+.card::after { border-color: #f7eee0; box-shadow: inset 0 0 0 3px var(--accent-dark), inset 0 0 95px rgba(0, 0, 0, .36); }
+.art { z-index: -2; }
+.mist { inset: 31% 0 18%; background: linear-gradient(transparent 0, rgba(37, 22, 44, .82) 58%, #211329 100%); }
+.tier-mark { position: absolute; z-index: 4; top: 40px; left: 40px; min-width: 166px; height: 112px; display: flex; align-items: flex-end; gap: 10px; padding: 12px 22px 14px 14px; color: #f8e3bd; border-left: 4px solid var(--accent); border-bottom: 2px solid #f8e3bd; background: linear-gradient(110deg, rgba(20, 16, 25, .9) 0, rgba(34, 22, 41, .78) 60%, rgba(34, 22, 41, .18) 100%); clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%); box-shadow: 0 16px 28px rgba(0, 0, 0, .28); }
+.tier-mark::before { content: ""; position: absolute; inset: 8px 16px 8px 8px; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .12) 0 2px, transparent 2px 12px); opacity: .28; }
+.tier-mark::after { content: ""; position: absolute; left: -4px; bottom: -11px; width: 65px; height: 4px; background: var(--accent); box-shadow: 76px 0 0 rgba(248, 227, 189, .55); }
+.tier-mark span { position: relative; margin: 0 0 11px; font: 500 12px "DM Mono", monospace; letter-spacing: 3px; opacity: .68; }
+.tier-mark b { position: relative; font: 700 76px/.72 Outfit, sans-serif; letter-spacing: 0; color: #fff3d3; text-shadow: 2px 2px 0 var(--accent-dark), 0 0 18px var(--accent-soft); }
+.tier-originium { position: absolute; top: 18px; left: 70px; width: 50px; height: 50px; background: url("/assets/backgrounds/originium.png") center/contain no-repeat; opacity: .88; filter: brightness(1.32) saturate(.98) contrast(1.32) drop-shadow(0 0 11px rgba(201, 89, 82, .48)); }
+.influence { background: linear-gradient(145deg, var(--accent-dark), color-mix(in srgb, var(--accent) 70%, #111)); border-color: #fff0ca; box-shadow: 0 10px 24px #0008, inset 0 0 0 4px var(--accent-soft); }
+.emblems { position: absolute; top: 154px; left: 40px; z-index: 4; display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 5px 9px; border: 2px solid #f8e3bd; background: #17101fbd; box-shadow: inset 0 0 0 2px var(--accent-soft), 0 12px 22px rgba(0, 0, 0, .24); }.emblems img { width: 40px; height: 40px; }
+.card footer { min-height: 430px; padding-top: 132px; background: linear-gradient(105deg, #201326 0, #321b35 48%, color-mix(in srgb, var(--accent-dark) 68%, #7b3440) 100%); }
+.identity-panel { position: relative; padding: 17px 22px 18px 24px; border-left: 7px solid var(--accent); border-top: 2px solid rgba(248, 227, 189, .8); background: linear-gradient(90deg, rgba(10, 8, 13, .48), rgba(255, 255, 255, .04)); box-shadow: inset 0 -1px 0 rgba(248, 227, 189, .35); }
+.identity-panel::after { content: ""; position: absolute; right: 18px; top: 16px; width: 74px; height: 5px; background: var(--accent); box-shadow: 0 13px 0 rgba(248, 227, 189, .38); opacity: .85; }
+.class-name { margin: 0 0 5px; color: var(--accent); text-shadow: 0 2px 8px rgba(0, 0, 0, .45); }
+.card h1 { font-size: 60px; letter-spacing: 0; line-height: .98; }
+.resource-affinity { margin: 9px 0 0; color: #f8e3bd; font: 500 12px "DM Mono", monospace; letter-spacing: 3px; text-transform: uppercase; opacity: .78; }
+.costs { margin-top: 32px; }
 .cost { min-width: 52px; justify-content: center; padding: 0 12px 0 7px; }
 .cost b { min-width: 14px; text-align: center; }

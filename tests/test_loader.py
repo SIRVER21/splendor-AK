@@ -15,15 +15,14 @@ def test_example_card_loads() -> None:
     assert len(card.resource_costs) == 5
 
 
-def test_originium_bonus_is_required_on_tier_three_only() -> None:
+def test_operator_material_is_limited_to_material_resources() -> None:
     data = CardLoader(Path(__file__).resolve().parents[1]).load("op_001").model_dump()
-    data["tier"] = 3
-    data["originium_bonus"] = 0
-    with pytest.raises(ValidationError, match="grant exactly 1 Originium"):
-        Card.model_validate(data)
+    data["resource_type"] = "arts"
+    assert Card.model_validate(data).resource_type_label == "Arts"
 
-    data["originium_bonus"] = 1
-    assert Card.model_validate(data).originium_bonus == 1
+    data["resource_type"] = "originium"
+    with pytest.raises(ValidationError):
+        Card.model_validate(data)
 
 
 def test_emblem_count_is_limited_to_two() -> None:

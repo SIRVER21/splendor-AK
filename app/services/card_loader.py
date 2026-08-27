@@ -36,6 +36,12 @@ class CardLoader:
             raise CardLoadError(f"Artwork does not exist: {card.artwork}")
         return card
 
+    def list_cards(self) -> list[Card]:
+        cards: list[Card] = []
+        for card_path in sorted(self.cards_dir.glob("*.json")):
+            cards.append(self.load(card_path.stem))
+        return cards
+
     def save(self, card_id: str, payload: dict) -> Card:
         """Validate and persist user-edited JSON while keeping filename and id aligned."""
         payload["id"] = card_id

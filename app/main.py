@@ -26,8 +26,17 @@ def get_card_or_404(card_id: str):
 
 
 @app.get("/", include_in_schema=False)
-async def home() -> RedirectResponse:
-    return RedirectResponse(url="/card/op_001")
+async def home(request: Request):
+    cards = loader.list_cards()
+    gallery_cards = [
+        {
+            "card": card,
+            "png_exists": (GENERATED_DIR / f"{card.id}.png").is_file(),
+            "png_url": f"/generated/{card.id}.png",
+        }
+        for card in cards
+    ]
+    return templates.TemplateResponse(request, "gallery.html", {"cards": gallery_cards})
 
 
 @app.get("/card/{card_id}", include_in_schema=False)
@@ -46,6 +55,15 @@ async def generate_card(request: Request, card_id: str) -> RedirectResponse:
     card = get_card_or_404(card_id)
     await render_card(str(request.url_for("card_render", card_id=card.id)), GENERATED_DIR / f"{card.id}.png")
     return RedirectResponse(url=f"/card/{card.id}", status_code=303)
+
+
+@app.post("/generate-missing", include_in_schema=False)
+async def generate_missing(request: Request) -> RedirectResponse:
+    for card in loader.list_cards():
+        output_path = GENERATED_DIR / f"{card.id}.png"
+        if not output_path.is_file():
+            await render_card(str(request.url_for("card_render", card_id=card.id)), output_path)
+    return RedirectResponse(url="/", status_code=303)
 
 
 @app.put("/api/card/{card_id}")
