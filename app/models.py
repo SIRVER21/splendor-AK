@@ -9,9 +9,9 @@ RESOURCE_LABELS = {
     "intelligence": "Intelligence",
     "logistics": "Logistics",
     "medical": "Medical",
-    "arts": "Arts",
+    "technology": "Technology",
 }
-ResourceType = Literal["lmd", "intelligence", "logistics", "medical", "arts"]
+ResourceType = Literal["lmd", "intelligence", "logistics", "medical", "technology"]
 
 
 class Cost(BaseModel):
@@ -21,7 +21,7 @@ class Cost(BaseModel):
     intelligence: ResourceAmount = 0
     logistics: ResourceAmount = 0
     medical: ResourceAmount = 0
-    arts: ResourceAmount = 0
+    technology: ResourceAmount = 0
 
 
 class Card(BaseModel):

@@ -4,7 +4,7 @@
   "tier": 3,
   "operator_class": "Sniper",
   "influence": 0,
-  "artwork": "assets/operators/exusiai.svg",
+  "artwork": "assets/operators/exusiai.png",
   "resource_type": "logistics",
   "rhodes_island_emblems": 0,
   "cost": {
@@ -12,6 +12,6 @@
     "intelligence": 1,
     "logistics": 1,
     "medical": 0,
-    "arts": 2
+    "technology": 2
   }
 }
