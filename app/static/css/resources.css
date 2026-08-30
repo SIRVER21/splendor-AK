@@ -4,8 +4,22 @@
 .card.resource-medical { --accent: #d67d86; --accent-dark: #73313f; --accent-soft: rgba(214, 125, 134, .24); }
 .card.resource-arts { --accent: #9d80b5; --accent-dark: #49335f; --accent-soft: rgba(157, 128, 181, .27); }
 
-.cost.lmd::before { background: #d5ac55; }
-.cost.intelligence::before { background: #7487b8; }
-.cost.logistics::before { background: #8ca970; }
-.cost.medical::before { background: #d67d86; }
-.cost.arts::before { background: #9d80b5; }
+.cost.lmd::before {
+  background: url("/assets/icons/LMD.png") center / contain no-repeat;
+}
+
+.cost.intelligence::before {
+  background: url("/assets/icons/INT.png") center / contain no-repeat;
+}
+
+.cost.logistics::before {
+  background: url("/assets/icons/Logistics.png") center / contain no-repeat;
+}
+
+.cost.medical::before {
+  background: url("/assets/icons/Medical.png") center / contain no-repeat;
+}
+
+.cost.technology::before {
+  background: url("/assets/icons/Tech.png") center / contain no-repeat;
+}

@@ -17,8 +17,8 @@ def test_example_card_loads() -> None:
 
 def test_operator_material_is_limited_to_material_resources() -> None:
     data = CardLoader(Path(__file__).resolve().parents[1]).load("op_001").model_dump()
-    data["resource_type"] = "arts"
-    assert Card.model_validate(data).resource_type_label == "Arts"
+    data["resource_type"] = "technology"
+    assert Card.model_validate(data).resource_type_label == "Technology"
 
     data["resource_type"] = "originium"
     with pytest.raises(ValidationError):

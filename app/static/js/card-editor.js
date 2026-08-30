@@ -2,13 +2,13 @@ const editor = document.querySelector("#card-editor");
 
 if (editor) {
   const preview = document.querySelector(".preview-panel iframe");
-  const resources = ["lmd", "intelligence", "logistics", "medical", "arts"];
+  const resources = ["lmd", "intelligence", "logistics", "medical", "technology"];
   const resourceLabels = {
     lmd: "LMD",
     intelligence: "Intelligence",
     logistics: "Logistics",
     medical: "Medical",
-    arts: "Arts",
+    technology: "Technology",
   };
 
   const syncPreviewAccent = () => {
@@ -36,8 +36,11 @@ if (editor) {
       resource_type: editor.elements.resource_type.value,
       rhodes_island_emblems: number("rhodes_island_emblems"),
       cost: {
-        lmd: number("cost_lmd"), intelligence: number("cost_intelligence"),
-        logistics: number("cost_logistics"), medical: number("cost_medical"), arts: number("cost_arts"),
+        lmd: number("cost_lmd"),
+	intelligence: number("cost_intelligence"),
+        logistics: number("cost_logistics"),
+	medical: number("cost_medical"),
+	arts: number("cost_technology"),
       },
     };
     const message = editor.querySelector(".save-message");
