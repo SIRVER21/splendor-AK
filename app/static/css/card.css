@@ -110,8 +110,8 @@ body {
     left: 0;
     bottom: 0;
 
-    width: 310px;
-    height: 780px;
+    width: 250px;
+    height: 560px;
 
     z-index: -1;
 
@@ -120,9 +120,9 @@ body {
     background:
         linear-gradient(
             25deg,
-            rgba(20, 11, 28, .94) 0%,
-            rgba(28, 14, 36, .76) 35%,
-            rgba(36, 18, 42, .38) 62%,
+            rgba(20, 11, 28, .88) 0%,
+            rgba(28, 14, 36, .62) 38%,
+            rgba(36, 18, 42, .24) 68%,
             rgba(36, 18, 42, 0) 100%
         );
 
@@ -143,14 +143,14 @@ body {
     position: absolute;
 
     left: 30px;
-    bottom: 155px;
+    bottom: 145px;
 
     z-index: 5;
 
     display: flex;
     flex-direction: column;
 
-    gap: 13px;
+    gap: 12px;
 }
 
 /*
@@ -161,8 +161,8 @@ body {
    ...
 */
 .cost {
-    width: 64px;
-    height: 64px;
+    width: 90px;
+    height: 90px;
 
     position: relative;
 
@@ -170,7 +170,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    border-radius: 16px;
+    border-radius: 20px;
 
     background:
         linear-gradient(
@@ -213,9 +213,8 @@ body {
 
 .cost-icon {
     position: absolute;
-
-    inset: 3px;
-    border-radius: 9px;
+    inset: 5px;
+    border-radius: 12px;
 
     background-position: center;
     background-repeat: no-repeat;
@@ -228,25 +227,25 @@ body {
 .cost b {
     position: absolute;
 
-    right: 3px;
-    bottom: 1px;
+    right: 5px;
+    bottom: 4px;
 
     z-index: 2;
 
-    min-width: 23px;
-    height: 23px;
+    min-width: 27px;
+    height: 27px;
 
     display: grid;
     place-items: center;
 
-    padding: 0 4px;
+    padding: 0 5px;
 
     border-radius: 50%;
 
     background: #241827;
     color: #fff4dc;
 
-    font: 700 16px/1 Outfit, sans-serif;
+    font: 700 18px/1 Outfit, sans-serif;
 
     box-shadow:
         0 2px 5px rgba(0, 0, 0, .42),
@@ -266,13 +265,13 @@ body {
 
     z-index: 5;
 
-    padding-left: 22px;
+    text-align: center;
 
-    border-left: 5px solid var(--accent);
+    border-left: none;
 }
 
 .class-name {
-    margin: 0 0 5px;
+    margin: 0 0 6px;
 
     color: var(--accent);
 

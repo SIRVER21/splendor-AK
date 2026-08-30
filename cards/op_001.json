@@ -3,15 +3,15 @@
   "name": "Exusiai",
   "tier": 3,
   "operator_class": "Sniper",
-  "influence": 2,
+  "influence": 0,
   "artwork": "assets/operators/exusiai.png",
-  "resource_type": "logistics",
-  "rhodes_island_emblems": 0,
+  "resource_type": "medical",
+  "rhodes_island_emblems": 2,
   "cost": {
     "lmd": 2,
     "intelligence": 1,
     "logistics": 1,
-    "medical": 0,
-    "technology": 2
+    "medical": 2,
+    "technology": 0
   }
 }
