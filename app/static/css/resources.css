@@ -1,25 +1,49 @@
-.card.resource-lmd { --accent: #d5ac55; --accent-dark: #6f4d20; --accent-soft: rgba(213, 172, 85, .24); }
-.card.resource-intelligence { --accent: #7487b8; --accent-dark: #2f3f75; --accent-soft: rgba(116, 135, 184, .26); }
-.card.resource-logistics { --accent: #8ca970; --accent-dark: #405b36; --accent-soft: rgba(140, 169, 112, .25); }
-.card.resource-medical { --accent: #d67d86; --accent-dark: #73313f; --accent-soft: rgba(214, 125, 134, .24); }
-.card.resource-technology { --accent: #9d80b5; --accent-dark: #49335f; --accent-soft: rgba(157, 128, 181, .27); }
-
-.cost.lmd::before {
-  background: url("/assets/icons/LMD.png") center / contain no-repeat;
+.card.resource-lmd {
+    --accent: #5b8fc4;
+    --accent-dark: #294d73;
+    --accent-soft: rgba(91, 143, 196, .26);
 }
 
-.cost.intelligence::before {
-  background: url("/assets/icons/INT.png") center / contain no-repeat;
+.card.resource-intelligence {
+    --accent: #9676c7;
+    --accent-dark: #513b76;
+    --accent-soft: rgba(150, 118, 199, .26);
 }
 
-.cost.logistics::before {
-  background: url("/assets/icons/Logistics.png") center / contain no-repeat;
+.card.resource-logistics {
+    --accent: #d4b85c;
+    --accent-dark: #756126;
+    --accent-soft: rgba(212, 184, 92, .25);
 }
 
-.cost.medical::before {
-  background: url("/assets/icons/Medical.png") center / contain no-repeat;
+.card.resource-medical {
+    --accent: #6fa56d;
+    --accent-dark: #3d633d;
+    --accent-soft: rgba(111, 165, 109, .25);
 }
 
-.cost.technology::before {
-  background: url("/assets/icons/Tech.png") center / contain no-repeat;
+.card.resource-technology {
+    --accent: #d8d9d5;
+    --accent-dark: #858783;
+    --accent-soft: rgba(216, 217, 213, .26);
+}
+
+.cost.lmd .cost-icon {
+    background: url("/assets/icons/LMD.png") center / contain no-repeat;
+}
+
+.cost.intelligence .cost-icon {
+    background: url("/assets/icons/INT.png") center / contain no-repeat;
+}
+
+.cost.logistics .cost-icon {
+    background: url("/assets/icons/Logistics.png") center / contain no-repeat;
+}
+
+.cost.medical .cost-icon {
+    background: url("/assets/icons/Medical.png") center / contain no-repeat;
+}
+
+.cost.technology .cost-icon {
+    background: url("/assets/icons/Tech.png") center / contain no-repeat;
 }
