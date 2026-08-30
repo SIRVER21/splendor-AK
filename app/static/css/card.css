@@ -56,20 +56,23 @@ body {
 
 .art {
     position: absolute;
-    inset: 0;
+
+    top: 86px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
     z-index: -3;
 
     overflow: hidden;
 }
 
 .art img {
-    position: absolute;
-    inset: 0;
-
     width: 100%;
     height: 100%;
 
     object-fit: cover;
+    object-position: center center;
 
     filter:
         saturate(.86)
@@ -110,7 +113,7 @@ body {
     left: 0;
     bottom: 0;
 
-    width: 250px;
+    width: 135px;
     height: 560px;
 
     z-index: -1;
@@ -259,11 +262,12 @@ body {
 .identity {
     position: absolute;
 
-    left: 125px;
-    right: 42px;
+    left: 0px;
+    right: 0px;
     bottom: 43px;
 
     z-index: 5;
+    padding: 0 30px;
 
     text-align: center;
 
@@ -310,6 +314,51 @@ body {
     text-transform: uppercase;
 
     opacity: .82;
+}
+
+/* ---------------------------------------------------------
+   TOP INFORMATION BAR
+   --------------------------------------------------------- */
+
+.top-bar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 86px;
+
+    z-index: 6;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(248, 227, 189, .97),
+            rgba(248, 227, 189, .94)
+        );
+
+    color: #241827;
+
+    border-bottom: 4px solid #fff4dc;
+
+    box-shadow:
+        0 7px 20px rgba(0, 0, 0, .34);
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    height: 100%;
 }
 
 /* ---------------------------------------------------------
@@ -383,28 +432,29 @@ body {
 }
 
 .tier-originium {
-    position: absolute;
+    position: relative;
 
-    top: 8px;
-    right: 80px;
+    display: block;
 
-    width: 62px;
-    height: 62px;
+    width: 80px;
+    height: 80px;
+
+    flex: 0 0 80px;
 
     background:
         url("/assets/backgrounds/originium.png")
         center / contain
         no-repeat;
 
-    opacity: .9;
+    opacity: .92;
 
     filter:
         brightness(1.3)
         saturate(.98)
         contrast(1.3)
         drop-shadow(
-            0 0 13px
-            rgba(201, 89, 82, .5)
+            0 0 10px
+            rgba(201, 89, 82, .42)
         );
 }
 
@@ -413,88 +463,85 @@ body {
    --------------------------------------------------------- */
 
 .influence {
-    position: absolute;
+    width: 64px;
+    height: 64px;
 
-    top: 165px;
-    right: 43px;
-
-    z-index: 5;
-
-    width: 92px;
-    height: 92px;
+    flex: 0 0 64px;
 
     display: grid;
     place-items: center;
 
-    transform: rotate(45deg);
+    position: relative;
 
-    border: 4px solid #fff0ca;
+    transform: none;
+
+    border: 3px solid #241827;
+
+    border-radius: 10px;
 
     background:
         linear-gradient(
             145deg,
-            var(--accent-dark),
-            color-mix(
-                in srgb,
-                var(--accent) 70%,
-                #111
-            )
+            #241827,
+            #3a2940
         );
 
+    color: #fff4dc;
+
     box-shadow:
-        0 10px 24px rgba(0, 0, 0, .55),
-        inset 0 0 0 4px var(--accent-soft);
+        0 4px 10px rgba(0, 0, 0, .28),
+        inset 0 0 0 2px rgba(248, 227, 189, .34);
 }
 
-.influence > * {
-    transform: rotate(-45deg);
-}
 
 .influence small {
-    margin-bottom: -12px;
+    position: absolute;
+    top: 7px;
 
-    font: 500 11px "DM Mono", monospace;
+    font:
+        500 8px "DM Mono", monospace;
 
     letter-spacing: 2px;
+
+    opacity: .68;
 }
 
 .influence b {
-    font-size: 42px;
+    margin-top: 9px;
+
+    font:
+        700 31px/1 Outfit, sans-serif;
 }
 
 /* ---------------------------------------------------------
    RHODES ISLAND EMBLEMS
    --------------------------------------------------------- */
-
 .emblems {
-    position: absolute;
-
-    left: 30px;
-    top: 42px;
-
-    z-index: 5;
-
     display: flex;
     align-items: center;
 
-    gap: 7px;
+    gap: 8px;
 
-    min-height: 48px;
+    min-height: 52px;
 
-    padding: 4px 8px;
+    padding: 5px 10px;
 
-    border: 2px solid #f8e3bd;
+    border: 2px solid rgba(36, 24, 39, .28);
 
-    background: rgba(23, 16, 31, .68);
+    background: rgba(255, 255, 255, .28);
 
     box-shadow:
-        inset 0 0 0 2px var(--accent-soft),
-        0 8px 18px rgba(0, 0, 0, .25);
+        inset 0 0 0 1px rgba(255, 255, 255, .45),
+        0 3px 8px rgba(36, 24, 39, .16);
+
+    border-radius: 10px;
 }
 
 .emblems img {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
+
+    display: block;
 }
 
 /* ---------------------------------------------------------
