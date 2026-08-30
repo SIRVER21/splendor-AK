@@ -40,7 +40,7 @@ if (editor) {
 	intelligence: number("cost_intelligence"),
         logistics: number("cost_logistics"),
 	medical: number("cost_medical"),
-	arts: number("cost_technology"),
+	technology: number("cost_technology"),
       },
     };
     const message = editor.querySelector(".save-message");
