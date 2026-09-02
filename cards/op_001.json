@@ -1,12 +1,12 @@
 {
   "id": "op_001",
   "name": "Exusiai",
-  "tier": 3,
+  "tier": 1,
   "operator_class": "Sniper",
-  "influence": 2,
+  "influence": 1,
   "artwork": "assets/operators/exusiai.png",
-  "resource_type": "lmd",
-  "rhodes_island_emblems": 2,
+  "resource_type": "logistics",
+  "rhodes_island_emblems": 0,
   "cost": {
     "lmd": 4,
     "intelligence": 1,
