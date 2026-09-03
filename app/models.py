@@ -33,10 +33,6 @@ class Card(BaseModel):
     operator_class: Annotated[str, Field(min_length=1, max_length=40)]
     influence: Annotated[int, Field(ge=0)]
     artwork: Annotated[str, Field(min_length=1)]
-    artwork_x: float = 50
-    artwork_y: float = 50
-    artwork_scale: Annotated[float, Field(ge=0.5, le=3)] = 1
-    background_color: Annotated[str, Field(pattern=r"^#[0-9a-fA-F]{6}$")] = "#291931"
     resource_type: ResourceType = "lmd"
     rhodes_island_emblems: Annotated[int, Field(ge=0, le=2)] = 0
     cost: Cost
@@ -47,13 +43,6 @@ class Card(BaseModel):
         value = value.strip()
         if not value:
             raise ValueError("must not be blank")
-        return value
-
-    @field_validator("artwork_x", "artwork_y")
-    @classmethod
-    def valid_artwork_position(cls, value: float) -> float:
-        if not -200 <= value <= 300:
-            raise ValueError("artwork position must be between -200 and 300")
         return value
 
     @property
