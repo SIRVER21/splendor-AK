@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from app.models import Card
 from app.services.card_loader import CardLoadError, CardLoader
 from app.services.renderer import render_card
 
@@ -39,10 +40,15 @@ async def home(request: Request):
     return templates.TemplateResponse(request, "gallery.html", {"cards": gallery_cards})
 
 
+@app.get("/card/new", include_in_schema=False)
+async def new_card(request: Request):
+    return templates.TemplateResponse(request, "card_detail.html", {"card": None, "is_new": True, "png_exists": False})
+
+
 @app.get("/card/{card_id}", include_in_schema=False)
 async def card_detail(request: Request, card_id: str):
     card = get_card_or_404(card_id)
-    return templates.TemplateResponse(request, "card_detail.html", {"card": card, "png_exists": (GENERATED_DIR / f"{card.id}.png").is_file()})
+    return templates.TemplateResponse(request, "card_detail.html", {"card": card, "is_new": False, "png_exists": (GENERATED_DIR / f"{card.id}.png").is_file()})
 
 
 @app.get("/render/{card_id}", include_in_schema=False)
@@ -64,6 +70,16 @@ async def generate_missing(request: Request) -> RedirectResponse:
         if not output_path.is_file():
             await render_card(str(request.url_for("card_render", card_id=card.id)), output_path)
     return RedirectResponse(url="/", status_code=303)
+
+
+@app.post("/api/card")
+async def create_card(request: Request) -> dict:
+    try:
+        payload = await request.json()
+        card = loader.create(payload)
+    except (CardLoadError, ValueError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return {"message": "Card created.", "card": card.model_dump()}
 
 
 @app.put("/api/card/{card_id}")

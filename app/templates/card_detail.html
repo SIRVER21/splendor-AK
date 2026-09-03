@@ -1,54 +1,79 @@
 {% extends "base.html" %}
-{% block title %}{{ card.name }} · Arknights Card Generator{% endblock %}
+{% block title %}{% if is_new %}New card{% else %}{{ card.name }}{% endif %} · Arknights Card Generator{% endblock %}
 {% block body %}
 <main class="workspace">
   <section class="intro">
-    <p class="eyebrow">FIRST MILESTONE · HTML → PNG</p>
-    <h1>{{ card.name }}</h1>
-    <p class="subtle">{{ card.id }} · Tier {{ card.tier }} · {{ card.operator_class }}</p>
-    <section class="card-data" aria-label="Card JSON data">
-      <h2>Card data</h2>
-      <dl class="metadata">
-        <div><dt>ID</dt><dd>{{ card.id }}</dd></div>
-        <div><dt>Name</dt><dd>{{ card.name }}</dd></div>
-        <div><dt>Tier</dt><dd>{{ card.tier }}</dd></div>
-        <div><dt>Class</dt><dd>{{ card.operator_class }}</dd></div>
-        <div><dt>Influence</dt><dd>{{ card.influence }}</dd></div>
-        <div><dt>Operator material</dt><dd>{{ card.resource_type_label }}</dd></div>
-        <div><dt>Originium</dt><dd>{% if card.tier == 3 %}Automatic Tier 3 design bonus{% else %}None{% endif %}</dd></div>
-        <div><dt>Artwork</dt><dd>{{ card.artwork }}</dd></div>
-        {% for resource, label, amount in card.resource_costs %}
-          <div class="resource-row"><dt>{{ label }}</dt><dd>{{ amount }}</dd></div>
-        {% endfor %}
-      </dl>
-    </section>
-    <details class="editor">
-      <summary>Edit card data</summary>
-      <form id="card-editor" data-card-id="{{ card.id }}">
-        <label>Name<input name="name" value="{{ card.name }}" required></label>
-        <label>Tier<select name="tier"><option value="1" {% if card.tier == 1 %}selected{% endif %}>1</option><option value="2" {% if card.tier == 2 %}selected{% endif %}>2</option><option value="3" {% if card.tier == 3 %}selected{% endif %}>3</option></select></label>
-        <label>Class<input name="operator_class" value="{{ card.operator_class }}" required></label>
-        <label>Influence<input name="influence" type="number" min="0" value="{{ card.influence }}" required></label>
-        <label>Operator material<select name="resource_type">{% for resource, label, amount in card.resource_costs %}<option value="{{ resource }}" {% if card.resource_type == resource %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
-        <label>Artwork path<input name="artwork" value="{{ card.artwork }}" required></label>
-        <label>RI Emblems (0–2)<input name="rhodes_island_emblems" type="number" min="0" max="2" value="{{ card.rhodes_island_emblems }}" required></label>
-        <fieldset><legend>Costs</legend>{% for resource, label, amount in card.resource_costs %}<label>{{ label }}<input name="cost_{{ resource }}" type="number" min="0" value="{{ amount }}" required></label>{% endfor %}</fieldset>
-        <button type="submit">Save data</button><p class="save-message" aria-live="polite"></p>
+    <p class="eyebrow">{% if is_new %}CREATE CARD{% else %}CARD EDITOR{% endif %}</p>
+    <h1>{% if is_new %}New card{% else %}{{ card.name }}{% endif %}</h1>
+    {% if not is_new %}
+      <p class="subtle">{{ card.id }} · Tier {{ card.tier }} · {{ card.operator_class }}</p>
+      <section class="card-data" aria-label="Card JSON data">
+        <h2>Card data</h2>
+        <dl class="metadata">
+          <div><dt>ID</dt><dd>{{ card.id }}</dd></div>
+          <div><dt>Name</dt><dd>{{ card.name }}</dd></div>
+          <div><dt>Tier</dt><dd>{{ card.tier }}</dd></div>
+          <div><dt>Class</dt><dd>{{ card.operator_class }}</dd></div>
+          <div><dt>Influence</dt><dd>{{ card.influence }}</dd></div>
+          <div><dt>Operator material</dt><dd>{{ card.resource_type_label }}</dd></div>
+          <div><dt>Originium</dt><dd>{% if card.tier == 3 %}Automatic Tier 3 design bonus{% else %}None{% endif %}</dd></div>
+          <div><dt>Artwork</dt><dd>{{ card.artwork }}</dd></div>
+          {% for resource, label, amount in card.resource_costs %}
+            <div class="resource-row"><dt>{{ label }}</dt><dd>{{ amount }}</dd></div>
+          {% endfor %}
+        </dl>
+      </section>
+    {% endif %}
+
+    <details class="editor" open>
+      <summary>{% if is_new %}Card data{% else %}Edit card data{% endif %}</summary>
+      <form id="card-editor" data-card-mode="{% if is_new %}create{% else %}edit{% endif %}"{% if not is_new %} data-card-id="{{ card.id }}"{% endif %}>
+        {% if is_new %}
+          <label>Card ID<input name="id" pattern="[a-z0-9_]+" maxlength="80" placeholder="op_002" required></label>
+        {% else %}
+          <input type="hidden" name="id" value="{{ card.id }}">
+        {% endif %}
+        <label>Name<input name="name" value="{{ card.name if card else '' }}" required></label>
+        <label>Tier<select name="tier"><option value="1" {% if not card or card.tier == 1 %}selected{% endif %}>1</option><option value="2" {% if card and card.tier == 2 %}selected{% endif %}>2</option><option value="3" {% if card and card.tier == 3 %}selected{% endif %}>3</option></select></label>
+        <label>Class<input name="operator_class" value="{{ card.operator_class if card else '' }}" placeholder="Sniper" required></label>
+        <label>Influence<input name="influence" type="number" min="0" value="{{ card.influence if card else 0 }}" required></label>
+        <label>Operator material<select name="resource_type">
+          {% for resource, label in [('lmd', 'LMD'), ('intelligence', 'Intelligence'), ('logistics', 'Logistics'), ('medical', 'Medical'), ('technology', 'Technology')] %}
+            <option value="{{ resource }}" {% if card and card.resource_type == resource or not card and resource == 'lmd' %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select></label>
+        <label>Artwork path<input name="artwork" value="{{ card.artwork if card else '' }}" placeholder="assets/operators/exusiai.png" required></label>
+        <label>RI Emblems (0–2)<input name="rhodes_island_emblems" type="number" min="0" max="2" value="{{ card.rhodes_island_emblems if card else 0 }}" required></label>
+        <fieldset><legend>Costs</legend>
+          {% for resource, label in [('lmd', 'LMD'), ('intelligence', 'Intelligence'), ('logistics', 'Logistics'), ('medical', 'Medical'), ('technology', 'Technology')] %}
+            <label>{{ label }}<input name="cost_{{ resource }}" type="number" min="0" value="{{ card.cost.model_dump()[resource] if card else 0 }}" required></label>
+          {% endfor %}
+        </fieldset>
+        <button type="submit">{% if is_new %}Create card{% else %}Save data{% endif %}</button>
+        <p class="save-message" aria-live="polite"></p>
       </form>
     </details>
-    {% if png_exists %}
-      <p class="status success">● PNG generated</p>
-      <a class="secondary-action" href="/generated/{{ card.id }}.png" target="_blank">Open generated PNG</a>
+
+    {% if not is_new %}
+      {% if png_exists %}
+        <p class="status success">● PNG generated</p>
+        <a class="secondary-action" href="/generated/{{ card.id }}.png" target="_blank">Open generated PNG</a>
+      {% else %}
+        <p class="status pending">● PNG not generated</p>
+      {% endif %}
+      <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if png_exists %}Regenerate PNG{% else %}Generate PNG{% endif %}</button></form>
+      <p class="hint">Preview below is live HTML/CSS. It does not create a file.</p>
     {% else %}
-      <p class="status pending">● PNG not generated</p>
+      <p class="hint">Create the card first. After saving, you will get the normal live preview and PNG generation controls.</p>
     {% endif %}
-    <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if png_exists %}Regenerate PNG{% else %}Generate PNG{% endif %}</button></form>
-    <p class="hint">Preview below is live HTML/CSS. It does not create a file.</p>
   </section>
-  <section class="preview-panel">
-    <div class="preview-label">LIVE PREVIEW · 63.5 × 88 mm proportion</div>
-    <div class="card-viewport"><iframe title="{{ card.name }} card preview" src="/render/{{ card.id }}"></iframe></div>
-  </section>
+
+  {% if not is_new %}
+    <section class="preview-panel">
+      <div class="preview-label">LIVE PREVIEW · 63.5 × 88 mm proportion</div>
+      <div class="card-viewport"><iframe title="{{ card.name }} card preview" src="/render/{{ card.id }}"></iframe></div>
+    </section>
+  {% endif %}
 </main>
 <script src="{{ url_for('static', path='js/card-editor.js') }}"></script>
 {% endblock %}
