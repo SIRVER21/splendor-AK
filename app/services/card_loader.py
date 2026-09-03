@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from re import fullmatch
 
 from pydantic import ValidationError
 
@@ -41,6 +42,19 @@ class CardLoader:
         for card_path in sorted(self.cards_dir.glob("*.json")):
             cards.append(self.load(card_path.stem))
         return cards
+
+    def next_card_id(self) -> str:
+        """Return the next available sequential operator id."""
+        numbers = []
+        for card_path in self.cards_dir.glob("op_*.json"):
+            match = fullmatch(r"op_(\d+)", card_path.stem)
+            if match:
+                numbers.append(int(match.group(1)))
+
+        next_number = max(numbers, default=0) + 1
+        while (self.cards_dir / f"op_{next_number:03d}.json").exists():
+            next_number += 1
+        return f"op_{next_number:03d}"
 
     def create(self, payload: dict) -> Card:
         """Validate and persist a new card."""
