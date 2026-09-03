@@ -1,9 +1,137 @@
-.editor { margin: 1rem 0; border-top: 1px solid #333543; border-bottom: 1px solid #333543; padding: .8rem 0; }
-.editor summary { cursor: pointer; color: #dec0ff; font-weight: 600; }
-#card-editor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1rem; }
-#card-editor label { display: grid; gap: .3rem; color: #b9baca; font-size: .78rem; }
-#card-editor input, #card-editor select { width: 100%; padding: .55rem; border: 1px solid #464959; border-radius: 3px; background: #1b1c27; color: #f6f2e9; font: .85rem "DM Mono", monospace; }
-#card-editor fieldset { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; border: 1px solid #464959; }
-#card-editor legend { color: #efae63; padding: 0 .35rem; font-size: .8rem; }
-#card-editor button { justify-self: start; margin-top: 0; }.save-message { align-self: center; margin: 0; color: #a9aabb; font-size: .8rem; }.save-message.saved { color: #7ee3ba; }.save-message.error { color: #ff9797; grid-column: 1 / -1; }
-@media (max-width: 480px) { #card-editor, #card-editor fieldset { grid-template-columns: 1fr; } }
+.editor {
+  margin: 1.5rem 0;
+  border-top: 1px solid #333543;
+  border-bottom: 1px solid #333543;
+  padding: 1rem 0 1.25rem;
+}
+
+.editor summary {
+  cursor: pointer;
+  color: #dec0ff;
+  font-weight: 600;
+}
+
+#card-editor {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1rem;
+  row-gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+#card-editor label {
+  display: grid;
+  gap: .45rem;
+  min-width: 0;
+  color: #b9baca;
+  font-size: .78rem;
+}
+
+#card-editor input,
+#card-editor select {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: .6rem .65rem;
+  border: 1px solid #464959;
+  border-radius: 4px;
+  background: #1b1c27;
+  color: #f6f2e9;
+  font: .85rem "DM Mono", monospace;
+}
+
+#card-editor input:focus,
+#card-editor select:focus {
+  outline: 2px solid #8f78ad;
+  outline-offset: 1px;
+  border-color: #8f78ad;
+}
+
+#card-editor .artwork-upload {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .65rem;
+  align-content: start;
+}
+
+#card-editor .artwork-upload label {
+  min-width: 0;
+}
+
+#card-editor .artwork-upload input[type="file"] {
+  padding: .45rem;
+  font-family: Outfit, sans-serif;
+  overflow: hidden;
+}
+
+#card-editor .artwork-upload button {
+  justify-self: start;
+  margin: 0;
+}
+
+#card-editor fieldset {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .8rem 1rem;
+  margin: .15rem 0;
+  padding: .9rem .8rem .8rem;
+  border: 1px solid #464959;
+  min-width: 0;
+}
+
+#card-editor fieldset label {
+  min-width: 0;
+}
+
+#card-editor legend {
+  color: #efae63;
+  padding: 0 .45rem;
+  font-size: .8rem;
+}
+
+#card-editor button {
+  justify-self: start;
+  margin-top: .1rem;
+}
+
+#card-editor > button[type="submit"] {
+  grid-column: 1;
+}
+
+.save-message {
+  align-self: center;
+  margin: 0;
+  color: #a9aabb;
+  font-size: .8rem;
+}
+
+.save-message.saved {
+  color: #7ee3ba;
+}
+
+.save-message.error {
+  grid-column: 1 / -1;
+  color: #ff9797;
+}
+
+@media (max-width: 700px) {
+  #card-editor {
+    grid-template-columns: 1fr;
+  }
+
+  #card-editor fieldset {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #card-editor > button[type="submit"],
+  #card-editor .save-message.error {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  #card-editor fieldset {
+    grid-template-columns: 1fr;
+  }
+}
