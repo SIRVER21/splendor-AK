@@ -5,99 +5,57 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/card.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/resources.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/card-tweaks.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/artwork-editor.css') }}">
   </head>
 
   <body>
-    <article class="card resource-{{ card.resource_type }}">
-
-      <!-- Artwork -->
+    <article class="card resource-{{ card.resource_type }}" style="--card-background: {{ card.background_color }}">
       <div class="art">
         <img
           src="/{{ card.artwork }}"
           alt="Artwork for {{ card.name }}"
+          style="object-position: {{ card.artwork_x }}% {{ card.artwork_y }}%; transform: scale({{ card.artwork_scale }}); transform-origin: center center;"
         >
       </div>
 
-      <!-- Global artwork shading -->
       <div class="art-shade"></div>
-
-      <!-- Resource column shading -->
       <div class="cost-shade"></div>
 
-      <!-- ==================================================
-           TOP INFORMATION BAR
-           ================================================== -->
-
       <div class="top-bar">
-
         {% if card.rhodes_island_emblems %}
-          <div
-            class="emblems"
-            aria-label="{{ card.rhodes_island_emblems }} Rhodes Island Emblems"
-          >
+          <div class="emblems" aria-label="{{ card.rhodes_island_emblems }} Rhodes Island Emblems">
             {% for _ in range(card.rhodes_island_emblems) %}
-              <img
-                src="/assets/icons/rhodes-island-emblem.svg"
-                alt=""
-              >
+              <img src="/assets/icons/rhodes-island-emblem.svg" alt="">
             {% endfor %}
           </div>
         {% endif %}
 
         <div class="top-bar-right">
-
           {% if card.tier == 3 and card.influence > 0 %}
-            <i
-              class="tier-originium"
-              aria-label="Originium"
-            ></i>
+            <i class="tier-originium" aria-label="Originium"></i>
           {% endif %}
-
           {% if card.influence > 0 %}
             <div class="influence">
               <small>INF</small>
               <b>{{ card.influence }}</b>
             </div>
           {% endif %}
-
         </div>
-
       </div>
-
-      <!-- ==================================================
-           RESOURCE COST
-           ================================================== -->
 
       <div class="costs">
         {% for resource, label, amount in card.active_costs %}
-          <div
-            class="cost {{ resource }}"
-            title="{{ label }}"
-          >
-            <span
-              class="cost-icon"
-              aria-hidden="true"
-            ></span>
-
+          <div class="cost {{ resource }}" title="{{ label }}">
+            <span class="cost-icon" aria-hidden="true"></span>
             <b>{{ amount }}</b>
           </div>
         {% endfor %}
       </div>
 
-      <!-- ==================================================
-           OPERATOR IDENTITY
-           ================================================== -->
-
       <div class="identity">
-
         <h1>{{ card.name }}</h1>
-
-        <p class="resource-affinity">
-          OPERATOR MATERIAL
-        </p>
-
+        <p class="resource-affinity">OPERATOR MATERIAL</p>
       </div>
-
     </article>
   </body>
 </html>

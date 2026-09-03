@@ -1,4 +1,6 @@
+from base64 import b64decode
 from pathlib import Path
+from re import fullmatch
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, RedirectResponse
@@ -11,6 +13,7 @@ from app.services.renderer import render_card
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 GENERATED_DIR = PROJECT_ROOT / "generated"
+ARTWORK_DIR = PROJECT_ROOT / "assets" / "operators"
 loader = CardLoader(PROJECT_ROOT)
 
 app = FastAPI(title="Arknights Card Generator")
@@ -90,6 +93,36 @@ async def update_card(card_id: str, request: Request) -> dict:
     except (CardLoadError, ValueError) as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     return {"message": "Card saved. Generate PNG manually to update the image.", "card": card.model_dump()}
+
+
+@app.post("/api/card/{card_id}/artwork")
+async def upload_artwork(card_id: str, request: Request) -> dict:
+    card = get_card_or_404(card_id)
+    try:
+        payload = await request.json()
+        data_url = payload.get("data")
+        if not isinstance(data_url, str):
+            raise ValueError("Artwork data is required.")
+        match = fullmatch(r"data:(image/(?:png|jpeg|webp));base64,(.+)", data_url)
+        if not match:
+            raise ValueError("Use a PNG, JPEG, or WebP image.")
+        media_type, encoded = match.groups()
+        raw = b64decode(encoded, validate=True)
+        if len(raw) > 10 * 1024 * 1024:
+            raise ValueError("Artwork must be 10 MB or smaller.")
+        extensions = {"image/png": "png", "image/jpeg": "jpg", "image/webp": "webp"}
+        extension = extensions[media_type]
+        filename = f"{card_id}.{extension}"
+        output_path = ARTWORK_DIR / filename
+        ARTWORK_DIR.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(raw)
+        artwork_path = f"assets/operators/{filename}"
+        updated = card.model_dump()
+        updated["artwork"] = artwork_path
+        loader.save(card_id, updated)
+    except (ValueError, TypeError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return {"message": "Artwork uploaded.", "artwork": artwork_path}
 
 
 @app.get("/generated/{card_id}.png", include_in_schema=False)
