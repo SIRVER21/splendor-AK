@@ -33,6 +33,10 @@ class Card(BaseModel):
     operator_class: Annotated[str, Field(min_length=1, max_length=40)]
     influence: Annotated[int, Field(ge=0)]
     artwork: Annotated[str, Field(min_length=1)]
+    artwork_x: Annotated[float, Field(ge=-200, le=300)] = 50
+    artwork_y: Annotated[float, Field(ge=-200, le=300)] = 50
+    artwork_scale: Annotated[float, Field(ge=0.5, le=3)] = 1
+    background_color: Annotated[str, Field(pattern=r"^#[0-9a-fA-F]{6}$")] = "#291931"
     resource_type: ResourceType = "lmd"
     rhodes_island_emblems: Annotated[int, Field(ge=0, le=2)] = 0
     cost: Cost
