@@ -18,7 +18,6 @@
           <div><dt>Operator material</dt><dd>{{ card.resource_type_label }}</dd></div>
           <div><dt>Originium</dt><dd>{% if card.tier == 3 %}Automatic Tier 3 design bonus{% else %}None{% endif %}</dd></div>
           <div><dt>Artwork</dt><dd>{{ card.artwork }}</dd></div>
-          <div><dt>Background</dt><dd>{{ card.background_color }}</dd></div>
           {% for resource, label, amount in card.resource_costs %}
             <div class="resource-row"><dt>{{ label }}</dt><dd>{{ amount }}</dd></div>
           {% endfor %}
@@ -30,7 +29,7 @@
       <summary>{% if is_new %}Card data{% else %}Edit card data{% endif %}</summary>
       <form id="card-editor" data-card-mode="{% if is_new %}create{% else %}edit{% endif %}"{% if not is_new %} data-card-id="{{ card.id }}"{% endif %}>
         {% if is_new %}
-          <label>Card ID<input name="id" pattern="[a-z0-9_]+" maxlength="80" value="{{ next_card_id }}" required></label>
+          <label>Card ID<input name="id" pattern="[a-z0-9_]+" maxlength="80" placeholder="op_002" required></label>
         {% else %}
           <input type="hidden" name="id" value="{{ card.id }}">
         {% endif %}
@@ -43,18 +42,8 @@
             <option value="{{ resource }}" {% if card and card.resource_type == resource or not card and resource == 'lmd' %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select></label>
-        <label>Artwork path<input name="artwork" value="{{ card.artwork if card else 'assets/operators/exusiai.png' }}" required></label>
-        <div class="artwork-upload">
-          <label>Artwork image<input id="artwork-file" type="file" accept="image/png,image/jpeg,image/webp"></label>
-          <button id="upload-artwork" type="button">{% if is_new %}Choose artwork{% else %}Upload artwork{% endif %}</button>
-          <p id="artwork-upload-message" class="save-message" aria-live="polite"></p>
-        </div>
-        <label>Artwork X (%)<input name="artwork_x" type="number" min="-200" max="300" step="0.1" value="{{ card.artwork_x if card else 50 }}"></label>
-        <label>Artwork Y (%)<input name="artwork_y" type="number" min="-200" max="300" step="0.1" value="{{ card.artwork_y if card else 50 }}"></label>
-        <label>Artwork scale<input name="artwork_scale" type="number" min="0.5" max="3" step="0.01" value="{{ card.artwork_scale if card else 1 }}"></label>
-        <label>Card background<input name="background_color" type="color" value="{{ card.background_color if card else '#291931' }}"></label>
+        <label>Artwork path<input name="artwork" value="{{ card.artwork if card else '' }}" placeholder="assets/operators/exusiai.png" required></label>
         <label>RI Emblems (0–2)<input name="rhodes_island_emblems" type="number" min="0" max="2" value="{{ card.rhodes_island_emblems if card else 0 }}" required></label>
-        <label class="mouse-editing-option"><span>Mouse artwork editing</span><input id="artwork-mouse-enabled" type="checkbox" checked></label>
         <fieldset><legend>Costs</legend>
           {% for resource, label in [('lmd', 'LMD'), ('intelligence', 'Intelligence'), ('logistics', 'Logistics'), ('medical', 'Medical'), ('technology', 'Technology')] %}
             <label>{{ label }}<input name="cost_{{ resource }}" type="number" min="0" value="{{ card.cost.model_dump()[resource] if card else 0 }}" required></label>
@@ -73,16 +62,18 @@
         <p class="status pending">● PNG not generated</p>
       {% endif %}
       <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if png_exists %}Regenerate PNG{% else %}Generate PNG{% endif %}</button></form>
-      <p class="hint">Preview below is live HTML/CSS. Drag the artwork in the preview or use X/Y and scale, then save the card.</p>
+      <p class="hint">Preview below is live HTML/CSS. It does not create a file.</p>
     {% else %}
-      <p class="hint">Choose an artwork to preview it immediately. The image will be saved when you create the card.</p>
+      <p class="hint">Create the card first. After saving, you will get the normal live preview and PNG generation controls.</p>
     {% endif %}
   </section>
 
-  <section class="preview-panel">
-    <div class="preview-label">LIVE PREVIEW · 63.5 × 88 mm proportion</div>
-    <div class="card-viewport">{% if is_new and preview_card_id %}<iframe title="New card preview" src="/render/{{ preview_card_id }}"></iframe>{% elif not is_new %}<iframe title="{{ card.name }} card preview" src="/render/{{ card.id }}"></iframe>{% endif %}</div>
-  </section>
+  {% if not is_new %}
+    <section class="preview-panel">
+      <div class="preview-label">LIVE PREVIEW · 63.5 × 88 mm proportion</div>
+      <div class="card-viewport"><iframe title="{{ card.name }} card preview" src="/render/{{ card.id }}"></iframe></div>
+    </section>
+  {% endif %}
 </main>
 <script src="{{ url_for('static', path='js/card-editor.js') }}"></script>
 {% endblock %}
