@@ -1,6 +1,7 @@
 const editor = document.querySelector("#card-editor");
 
 if (editor) {
+  const isCreate = editor.dataset.cardMode === "create";
   const preview = document.querySelector(".preview-panel iframe");
   const resources = ["lmd", "intelligence", "logistics", "medical", "technology"];
   const resourceLabels = {
@@ -28,6 +29,7 @@ if (editor) {
     event.preventDefault();
     const number = (name) => Number(editor.elements[name].value);
     const payload = {
+      id: editor.elements.id.value.trim(),
       name: editor.elements.name.value,
       tier: number("tier"),
       operator_class: editor.elements.operator_class.value,
@@ -37,20 +39,41 @@ if (editor) {
       rhodes_island_emblems: number("rhodes_island_emblems"),
       cost: {
         lmd: number("cost_lmd"),
-	intelligence: number("cost_intelligence"),
+        intelligence: number("cost_intelligence"),
         logistics: number("cost_logistics"),
-	medical: number("cost_medical"),
-	technology: number("cost_technology"),
+        medical: number("cost_medical"),
+        technology: number("cost_technology"),
       },
     };
+
     const message = editor.querySelector(".save-message");
-    const response = await fetch(`/api/card/${editor.dataset.cardId}`, {
-      method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-    });
-    const result = await response.json();
-    if (!response.ok) { message.textContent = result.detail; message.className = "save-message error"; return; }
-    message.textContent = "Saved. Use Generate PNG when ready.";
-    message.className = "save-message saved";
-    window.setTimeout(() => window.location.reload(), 650);
+    const endpoint = isCreate ? "/api/card" : `/api/card/${editor.dataset.cardId}`;
+    const method = isCreate ? "POST" : "PUT";
+
+    try {
+      const response = await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        message.textContent = result.detail ?? "Unable to save card.";
+        message.className = "save-message error";
+        return;
+      }
+
+      if (isCreate) {
+        window.location.assign(`/card/${result.card.id}`);
+        return;
+      }
+
+      message.textContent = "Saved. Use Generate PNG when ready.";
+      message.className = "save-message saved";
+      window.setTimeout(() => window.location.reload(), 650);
+    } catch (error) {
+      message.textContent = "Unable to reach the server.";
+      message.className = "save-message error";
+    }
   });
 }

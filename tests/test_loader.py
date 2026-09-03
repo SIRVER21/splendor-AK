@@ -32,3 +32,56 @@ def test_emblem_count_is_limited_to_two() -> None:
     data["rhodes_island_emblems"] = 3
     with pytest.raises(ValidationError):
         Card.model_validate(data)
+
+
+def test_create_card_writes_json(tmp_path: Path) -> None:
+    root = tmp_path
+    (root / "cards").mkdir()
+    artwork = root / "assets" / "operators" / "new.png"
+    artwork.parent.mkdir(parents=True)
+    artwork.write_bytes(b"test")
+
+    payload = {
+        "id": "op_002",
+        "name": "New Operator",
+        "tier": 2,
+        "operator_class": "Caster",
+        "influence": 2,
+        "artwork": "assets/operators/new.png",
+        "resource_type": "technology",
+        "rhodes_island_emblems": 1,
+        "cost": {
+            "lmd": 2,
+            "intelligence": 1,
+            "logistics": 0,
+            "medical": 0,
+            "technology": 2,
+        },
+    }
+
+    card = CardLoader(root).create(payload)
+
+    assert card.id == "op_002"
+    assert (root / "cards" / "op_002.json").is_file()
+    assert CardLoader(root).load("op_002").name == "New Operator"
+
+
+def test_create_card_rejects_duplicate_id(tmp_path: Path) -> None:
+    root = tmp_path
+    (root / "cards").mkdir()
+    (root / "assets").mkdir()
+    (root / "cards" / "op_002.json").write_text("{}", encoding="utf-8")
+
+    payload = {
+        "id": "op_002",
+        "name": "New Operator",
+        "tier": 1,
+        "operator_class": "Caster",
+        "influence": 0,
+        "artwork": "assets/new.png",
+        "resource_type": "lmd",
+        "cost": {},
+    }
+
+    with pytest.raises(ValueError, match="already exists"):
+        CardLoader(root).create(payload)

@@ -8,7 +8,10 @@
       <h1>Generated cards</h1>
       <p class="subtle">Browse JSON cards, search by ID or name, and render only the PNG files you choose.</p>
     </div>
-    <form action="/generate-missing" method="post"><button type="submit">Generate all missing</button></form>
+    <div class="gallery-header-actions">
+      <a class="primary-action" href="/card/new">+ New card</a>
+      <form action="/generate-missing" method="post"><button type="submit">Generate all missing</button></form>
+    </div>
   </section>
 
   <label class="search-box">Search<input id="gallery-search" type="search" placeholder="Exusiai or op_001" autocomplete="off"></label>
