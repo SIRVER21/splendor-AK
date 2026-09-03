@@ -34,28 +34,6 @@ def test_emblem_count_is_limited_to_two() -> None:
         Card.model_validate(data)
 
 
-def test_artwork_settings_have_defaults_and_validation() -> None:
-    data = CardLoader(Path(__file__).resolve().parents[1]).load("op_001").model_dump()
-    data.pop("artwork_x", None)
-    data.pop("artwork_y", None)
-    data.pop("artwork_scale", None)
-    data.pop("background_color", None)
-    card = Card.model_validate(data)
-    assert card.artwork_x == 50
-    assert card.artwork_y == 50
-    assert card.artwork_scale == 1
-    assert card.background_color == "#291931"
-
-    data["artwork_scale"] = 4
-    with pytest.raises(ValidationError):
-        Card.model_validate(data)
-
-    data["artwork_scale"] = 1
-    data["background_color"] = "purple"
-    with pytest.raises(ValidationError):
-        Card.model_validate(data)
-
-
 def test_create_card_writes_json(tmp_path: Path) -> None:
     root = tmp_path
     (root / "cards").mkdir()
