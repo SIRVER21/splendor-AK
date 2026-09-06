@@ -4,9 +4,6 @@
     --material-slot-top: 18px;
 }
 
-/* The source PNGs have opaque square backgrounds, so alpha masking cannot
-   detect the visible silhouette. Keep one shared silhouette per asset family
-   and use it for both the material image and the top-bar cutout. */
 .material-slot img {
     display: block;
     width: 100%;
@@ -14,23 +11,6 @@
     object-fit: contain;
     clip-path: var(--material-shape);
     filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .55));
-}
-
-.top-bar {
-    --cutout-left: calc(100% - var(--material-slot-right) - var(--material-slot-size));
-    --cutout-right: calc(100% - var(--material-slot-right));
-    --cutout-top: var(--material-slot-top);
-    --cutout-bottom: 86px;
-    clip-path: polygon(
-        0 0,
-        100% 0,
-        100% 100%,
-        var(--cutout-right) 100%,
-        var(--cutout-right) var(--cutout-top),
-        var(--cutout-left) var(--cutout-top),
-        var(--cutout-left) 100%,
-        0 100%
-    );
 }
 
 .material-slot {
@@ -43,15 +23,100 @@
     pointer-events: none;
 }
 
-.material-slot::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: transparent;
-    clip-path: var(--material-shape);
+/* The notch is cut from the lower edge of the bar and follows the same
+   silhouette used to clip the material image. */
+.card.resource-logistics .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        83.5% 100%,
+        82.4% 100%,
+        80.0% 21%,
+        77.1% 100%,
+        75.9% 100%,
+        0 100%
+    );
 }
 
-/* Existing asset silhouettes. The same shape is applied to the slot image. */
+.card.resource-lmd .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        85.6% 21%,
+        74.1% 21%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-medical .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        83.4% 100%,
+        83.4% 81%,
+        81.8% 81%,
+        81.8% 58%,
+        78% 58%,
+        78% 81%,
+        76.4% 81%,
+        76.4% 100%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-intelligence .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        84.9% 88%,
+        83% 69%,
+        80% 58%,
+        77% 69%,
+        75.1% 88%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-technology .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        84.5% 87%,
+        82.8% 92%,
+        82.2% 76%,
+        80% 82%,
+        77.8% 76%,
+        77.2% 92%,
+        75.5% 87%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+/* Keep the accent line visible after clipping the bar. */
+.card .top-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background: var(--accent);
+    pointer-events: none;
+}
+
 .material-logistics {
     --material-shape: polygon(50% 0, 100% 29%, 82% 100%, 18% 100%, 0 29%);
 }
