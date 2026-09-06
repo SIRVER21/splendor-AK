@@ -3,6 +3,7 @@
 {% block body %}
 <main class="workspace">
   <section class="intro">
+    {% if not is_new %}<a class="back-link" href="/">← Back to cards</a>{% endif %}
     <p class="eyebrow">{% if is_new %}CREATE CARD{% else %}CARD EDITOR{% endif %}</p>
     <h1>{% if is_new %}New card{% else %}{{ card.name }}{% endif %}</h1>
     {% if not is_new %}
