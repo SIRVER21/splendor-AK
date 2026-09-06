@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/material-slot.css') }}">
   </head>
   <body>
+    {% set material_icons = {
+      'lmd': 'LMD.png',
+      'intelligence': 'INT.png',
+      'logistics': 'Logistics.png',
+      'medical': 'Medical.png',
+      'technology': 'Tech.png'
+    } %}
+
     <article class="card resource-{{ card.resource_type }}" style="--card-background: {{ card.background_color }}">
       <div class="art">
         <img
@@ -20,7 +28,10 @@
       <div class="art-shade"></div>
       <div class="cost-shade"></div>
 
-      <div class="top-bar">
+      <div
+        class="top-bar"
+        style="--material-mask: url('/assets/icons/{{ material_icons[card.resource_type] }}')"
+      >
         {% if card.rhodes_island_emblems %}
           <div class="emblems" aria-label="{{ card.rhodes_island_emblems }} Rhodes Island Emblems">
             {% for _ in range(card.rhodes_island_emblems) %}
@@ -38,14 +49,6 @@
           {% endif %}
         </div>
       </div>
-
-      {% set material_icons = {
-        'lmd': 'LMD.png',
-        'intelligence': 'INT.png',
-        'logistics': 'Logistics.png',
-        'medical': 'Medical.png',
-        'technology': 'Tech.png'
-      } %}
 
       <div class="material-slot material-{{ card.resource_type }}" aria-label="{{ card.resource_type_label }} operator material">
         <img src="/assets/icons/{{ material_icons[card.resource_type] }}" alt="{{ card.resource_type_label }}">
