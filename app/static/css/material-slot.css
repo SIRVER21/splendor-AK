@@ -1,41 +1,36 @@
 :root {
     --material-slot-right: 108px;
     --material-slot-size: 90px;
-    --material-slot-top: 0px;
+    --material-slot-top: 18px;
 }
 
-/*
-   The material PNG is the source of truth for its silhouette.
-   Its alpha channel is also used to subtract the exact same shape
-   from the top bar, so there is no second hand-written silhouette.
-*/
+/* The source PNGs have opaque square backgrounds, so alpha masking cannot
+   detect the visible silhouette. Keep one shared silhouette per asset family
+   and use it for both the material image and the top-bar cutout. */
+.material-slot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    clip-path: var(--material-shape);
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .55));
+}
+
 .top-bar {
-    --material-mask: none;
-
-    mask-image:
-        linear-gradient(#fff, #fff),
-        var(--material-mask);
-    mask-size:
-        100% 100%,
-        var(--material-slot-size) var(--material-slot-size);
-    mask-position:
+    --cutout-left: calc(100% - var(--material-slot-right) - var(--material-slot-size));
+    --cutout-right: calc(100% - var(--material-slot-right));
+    --cutout-top: var(--material-slot-top);
+    --cutout-bottom: 86px;
+    clip-path: polygon(
         0 0,
-        right var(--material-slot-right) top var(--material-slot-top);
-    mask-repeat: no-repeat, no-repeat;
-    mask-mode: alpha, alpha;
-    mask-composite: add, subtract;
-
-    -webkit-mask-image:
-        linear-gradient(#fff, #fff),
-        var(--material-mask);
-    -webkit-mask-size:
+        100% 0,
         100% 100%,
-        var(--material-slot-size) var(--material-slot-size);
-    -webkit-mask-position:
-        0 0,
-        right var(--material-slot-right) top var(--material-slot-top);
-    -webkit-mask-repeat: no-repeat, no-repeat;
-    -webkit-mask-composite: source-over, destination-out;
+        var(--cutout-right) 100%,
+        var(--cutout-right) var(--cutout-top),
+        var(--cutout-left) var(--cutout-top),
+        var(--cutout-left) 100%,
+        0 100%
+    );
 }
 
 .material-slot {
@@ -48,15 +43,46 @@
     pointer-events: none;
 }
 
-.material-slot img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .55));
+.material-slot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    clip-path: var(--material-shape);
 }
 
-/* Keep the Influence position unchanged and reserve its space even at 0. */
+/* Existing asset silhouettes. The same shape is applied to the slot image. */
+.material-logistics {
+    --material-shape: polygon(50% 0, 100% 29%, 82% 100%, 18% 100%, 0 29%);
+}
+
+.material-lmd {
+    --material-shape: inset(14% 0 round 12px);
+}
+
+.material-medical {
+    --material-shape: polygon(
+        35% 0, 65% 0, 65% 25%, 100% 25%,
+        100% 75%, 65% 75%, 65% 100%,
+        35% 100%, 35% 75%, 0 75%,
+        0 25%, 35% 25%
+    );
+}
+
+.material-intelligence {
+    --material-shape: circle(50% at 50% 50%);
+}
+
+.material-technology {
+    --material-shape: polygon(
+        50% 0, 64.5% 14.9%, 85.4% 14.6%, 85.1% 35.5%,
+        100% 50%, 85.1% 64.5%, 85.4% 85.4%, 64.5% 85.1%,
+        50% 100%, 35.5% 85.1%, 14.6% 85.4%, 14.9% 64.5%,
+        0 50%, 14.9% 35.5%, 14.6% 14.6%, 35.5% 14.9%
+    );
+}
+
+/* Keep Influence fixed and reserve its space even at 0. */
 .top-bar-right {
     width: 64px;
     height: 64px;
