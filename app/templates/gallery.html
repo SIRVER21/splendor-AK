@@ -5,18 +5,21 @@
   <section class="gallery-header">
     <div>
       <p class="eyebrow">CARD GALLERY</p>
-      <h1>Generated cards</h1>
-      <p class="subtle">Browse JSON cards, search by ID or name, and render only the PNG files you choose.</p>
+      <h1>Cards</h1>
+      <p class="subtle">Browse cards by ID or name and generate PNGs when needed.</p>
     </div>
     <div class="gallery-header-actions">
       <a class="primary-action" href="/card/new">+ New card</a>
-      <form action="/generate-missing" method="post"><button type="submit">Generate all missing</button></form>
+      <form action="/generate-missing" method="post"><button type="submit">Generate all</button></form>
     </div>
   </section>
 
-  <label class="search-box">Search<input id="gallery-search" type="search" placeholder="Exusiai or op_001" autocomplete="off"></label>
+  <label class="search-box" for="gallery-search">
+    <span>Search cards</span>
+    <input id="gallery-search" type="search" placeholder="Search by name or ID, e.g. Exusiai or op_001" autocomplete="off">
+  </label>
 
-  <section class="gallery-grid" aria-label="Cards">
+  <section class="gallery-list" aria-label="Cards">
     {% for item in cards %}
       {% set card = item.card %}
       <article class="gallery-card resource-{{ card.resource_type }}" data-card-id="{{ card.id }}" data-card-name="{{ card.name | lower }}">
@@ -31,9 +34,8 @@
           {% endif %}
         </a>
         <div class="gallery-meta">
-          <p class="class-name">{{ card.operator_class }}</p>
+          <p class="card-id">{{ card.id }}</p>
           <h2>{{ card.name }}</h2>
-          <p class="subtle">{{ card.id }} · Tier {{ card.tier }} · {{ card.resource_type_label }}</p>
         </div>
         <div class="gallery-actions">
           <a class="secondary-action" href="/card/{{ card.id }}">Edit</a>
