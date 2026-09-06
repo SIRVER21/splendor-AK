@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/card.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/resources.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/card-tweaks.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/material-slot.css') }}">
   </head>
   <body>
     <article class="card resource-{{ card.resource_type }}" style="--card-background: {{ card.background_color }}">
@@ -29,9 +30,6 @@
         {% endif %}
 
         <div class="top-bar-right">
-          {% if card.tier == 3 and card.influence > 0 %}
-            <i class="tier-originium" aria-label="Originium"></i>
-          {% endif %}
           {% if card.influence > 0 %}
             <div class="influence">
               <small>INF</small>
@@ -40,6 +38,22 @@
           {% endif %}
         </div>
       </div>
+
+      {% set material_icons = {
+        'lmd': 'LMD.png',
+        'intelligence': 'INT.png',
+        'logistics': 'Logistics.png',
+        'medical': 'Medical.png',
+        'technology': 'Tech.png'
+      } %}
+
+      <div class="material-slot material-{{ card.resource_type }}" aria-label="{{ card.resource_type_label }} operator material">
+        <img src="/assets/icons/{{ material_icons[card.resource_type] }}" alt="{{ card.resource_type_label }}">
+      </div>
+
+      {% if card.tier == 3 and card.influence > 0 %}
+        <i class="tier-originium" aria-label="Originium"></i>
+      {% endif %}
 
       <div class="costs">
         {% for resource, label, amount in card.active_costs %}
