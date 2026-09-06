@@ -2,7 +2,6 @@
     --material-slot-right: 78px;
     --material-slot-size: 90px;
     --material-slot-top: 58px;
-    --material-slot-gap: 7px;
 }
 
 /* The bar has a resource-specific cutout at its lower edge.
@@ -116,21 +115,21 @@
 .material-slot::after {
     content: "";
     position: absolute;
-    inset: 0;
     pointer-events: none;
 }
 
 /* Outer material-colored frame. */
 .material-slot::before {
+    inset: 0;
     background: var(--accent);
     clip-path: var(--material-shape);
     filter: drop-shadow(0 4px 7px rgba(0, 0, 0, .48));
 }
 
-/* Inner cut leaves a visible gap between the material and its frame. */
+/* Transparent inner area lets the artwork show through the gap. */
 .material-slot::after {
     inset: 6px;
-    background: #17121d;
+    background: transparent;
     clip-path: var(--material-shape);
     box-shadow: inset 0 0 0 2px rgba(255, 247, 232, .2);
 }
