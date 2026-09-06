@@ -1,0 +1,202 @@
+:root {
+    --material-slot-right: 78px;
+    --material-slot-size: 90px;
+    --material-slot-top: 58px;
+    --material-slot-gap: 7px;
+}
+
+/* The bar has a resource-specific cutout at its lower edge.
+   The material itself is deliberately detached from that cutout,
+   leaving the artwork visible between the bar and the frame. */
+.card.resource-logistics .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        83.7% 100%,
+        79.9% 48%,
+        76.1% 100%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-lmd .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        85.6% 58%,
+        74.1% 58%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-medical .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        83.4% 100%,
+        83.4% 77%,
+        81.8% 77%,
+        81.8% 58%,
+        78% 58%,
+        78% 77%,
+        76.4% 77%,
+        76.4% 100%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-intelligence .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        84.9% 84%,
+        83% 69%,
+        80% 58%,
+        77% 69%,
+        75.1% 84%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+.card.resource-technology .top-bar {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        85.6% 100%,
+        84.5% 83%,
+        82.8% 88%,
+        82.2% 74%,
+        80% 79%,
+        77.8% 74%,
+        77.2% 88%,
+        75.5% 83%,
+        74.1% 100%,
+        0 100%
+    );
+}
+
+/* Recreate the lower accent line after clipping the bar. */
+.card .top-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background: var(--accent);
+    pointer-events: none;
+}
+
+.material-slot {
+    position: absolute;
+    top: var(--material-slot-top);
+    right: var(--material-slot-right);
+    width: var(--material-slot-size);
+    height: var(--material-slot-size);
+    z-index: 8;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.material-slot::before,
+.material-slot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Outer material-colored frame. */
+.material-slot::before {
+    background: var(--accent);
+    clip-path: var(--material-shape);
+    filter: drop-shadow(0 4px 7px rgba(0, 0, 0, .48));
+}
+
+/* Inner cut leaves a visible gap between the material and its frame. */
+.material-slot::after {
+    inset: 6px;
+    background: #17121d;
+    clip-path: var(--material-shape);
+    box-shadow: inset 0 0 0 2px rgba(255, 247, 232, .2);
+}
+
+.material-slot img {
+    position: relative;
+    z-index: 1;
+    width: calc(var(--material-slot-size) - 18px);
+    height: calc(var(--material-slot-size) - 18px);
+    object-fit: contain;
+    clip-path: var(--material-shape);
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .55));
+}
+
+/* Each material gets the silhouette from its existing asset family. */
+.material-logistics {
+    --material-shape: polygon(50% 0, 100% 29%, 82% 100%, 18% 100%, 0 29%);
+}
+
+.material-lmd {
+    --material-shape: inset(14% 0 round 12px);
+}
+
+.material-medical {
+    --material-shape: polygon(
+        35% 0, 65% 0, 65% 25%, 100% 25%,
+        100% 75%, 65% 75%, 65% 100%,
+        35% 100%, 35% 75%, 0 75%,
+        0 25%, 35% 25%
+    );
+}
+
+.material-intelligence {
+    --material-shape: circle(50% at 50% 50%);
+}
+
+.material-technology {
+    --material-shape: polygon(
+        50% 0, 64.5% 14.9%, 85.4% 14.6%, 85.1% 35.5%,
+        100% 50%, 85.1% 64.5%, 85.4% 85.4%, 64.5% 85.1%,
+        50% 100%, 35.5% 85.1%, 14.6% 85.4%, 14.9% 64.5%,
+        0 50%, 14.9% 35.5%, 14.6% 14.6%, 35.5% 14.9%
+    );
+}
+
+/* Keep the Influence position unchanged and reserve its space even at 0. */
+.top-bar-right {
+    width: 64px;
+    height: 64px;
+}
+
+.top-bar-right .influence {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.card .tier-originium {
+    position: absolute;
+    top: 3px;
+    right: 178px;
+    z-index: 8;
+}
+
+@media (max-width: 750px) {
+    .material-slot {
+        right: 78px;
+    }
+}
