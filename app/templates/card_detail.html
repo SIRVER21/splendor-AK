@@ -49,9 +49,9 @@
           <button id="upload-artwork" type="button">{% if is_new %}Choose artwork{% else %}Upload artwork{% endif %}</button>
           <p id="artwork-upload-message" class="save-message" aria-live="polite"></p>
         </div>
-        <label>Artwork X (%)<input name="artwork_x" type="number" min="-200" max="300" step="0.1" value="{{ card.artwork_x if card else 50 }}"></label>
-        <label>Artwork Y (%)<input name="artwork_y" type="number" min="-200" max="300" step="0.1" value="{{ card.artwork_y if card else 50 }}"></label>
         <label>Artwork scale<input name="artwork_scale" type="number" min="0.5" max="3" step="0.01" value="{{ card.artwork_scale if card else 1 }}"></label>
+        <label>Artwork Y (%)<input name="artwork_y" type="number" min="-200" max="300" step="0.1" value="{{ card.artwork_y if card else 50 }}"></label>
+        <label>Artwork X (%)<input name="artwork_x" type="number" min="-200" max="300" step="0.1" value="{{ card.artwork_x if card else 50 }}"></label>
         <label>Card background<input name="background_color" type="color" value="{{ card.background_color if card else '#291931' }}"></label>
         <label>RI Emblems (0–2)<input name="rhodes_island_emblems" type="number" min="0" max="2" value="{{ card.rhodes_island_emblems if card else 0 }}" required></label>
         <label class="mouse-editing-option"><span>Mouse artwork editing</span><input id="artwork-mouse-enabled" type="checkbox" checked></label>
