@@ -4,7 +4,14 @@ from pathlib import Path
 
 from app.models import Card
 
-RESOURCE_TYPES = ("lmd", "intelligence", "logistics", "medical", "technology")
+SOURCE_COLORS = ("black", "blue", "green", "red", "white")
+SOURCE_TO_RESOURCE = {
+    "black": "intelligence",
+    "blue": "lmd",
+    "green": "medical",
+    "red": "logistics",
+    "white": "technology",
+}
 
 
 @dataclass(frozen=True)
@@ -37,17 +44,41 @@ class SplendorScheme:
 
 class SplendorSchemeCatalog:
     def __init__(self, project_root: Path) -> None:
-        self.path = project_root / "data" / "splendor_schemes.json"
+        self.path = project_root / "data" / "splendor_card_tables.json"
         self._schemes = self._load()
 
     def _load(self) -> tuple[SplendorScheme, ...]:
-        payload = json.loads(self.path.read_text(encoding="utf-8"))
-        schemes = tuple(SplendorScheme(**item) for item in payload)
+        tables = json.loads(self.path.read_text(encoding="utf-8"))
+        schemes: list[SplendorScheme] = []
+        for color in SOURCE_COLORS:
+            rows = tables[color]
+            if len(rows) != 18:
+                raise ValueError(f"Expected 18 {color} cards, found {len(rows)}.")
+            for index, row in enumerate(rows):
+                if len(row) != 6:
+                    raise ValueError(f"Invalid {color} card row at index {index}.")
+                points, black, white, red, blue, green = row
+                tier = 1 if index < 8 else 2 if index < 14 else 3
+                scheme_id = f"op_{len(schemes) + 1:02d}"
+                schemes.append(
+                    SplendorScheme(
+                        id=scheme_id,
+                        tier=tier,
+                        influence=points,
+                        resource_type=SOURCE_TO_RESOURCE[color],
+                        cost={
+                            "lmd": blue,
+                            "intelligence": black,
+                            "logistics": red,
+                            "medical": green,
+                            "technology": white,
+                        },
+                        source_color=color,
+                    )
+                )
         if len(schemes) != 90:
             raise ValueError(f"Expected 90 Splendor schemes, found {len(schemes)}.")
-        if len({scheme.id for scheme in schemes}) != len(schemes):
-            raise ValueError("Splendor scheme IDs must be unique.")
-        return schemes
+        return tuple(schemes)
 
     @property
     def schemes(self) -> tuple[SplendorScheme, ...]:
