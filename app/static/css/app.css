@@ -103,6 +103,7 @@ button:hover, .primary-action:hover { background: #ffa084; transform: translateY
 }
 .scheme-status.matched { color: #7ee3ba; }
 .scheme-status.unmatched { color: #f6bd6a; }
+.scheme-status.duplicate { color: #ff7777; }
 
 /* ---------------------------------------------------------
    CARD CATALOG
