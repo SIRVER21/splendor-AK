@@ -2,6 +2,7 @@ const editor = document.querySelector("#card-editor");
 
 if (editor) {
   const isCreate = editor.dataset.cardMode === "create";
+  const currentCardId = editor.dataset.cardId ?? null;
   const preview = document.querySelector(".preview-panel iframe");
   const mouseToggle = document.querySelector("#artwork-mouse-enabled");
   const schemeSelector = document.querySelector("#scheme-selector");
@@ -45,12 +46,20 @@ if (editor) {
     const match = findMatchingScheme();
     if (schemeSelector) schemeSelector.value = match?.id ?? "";
     if (!schemeStatus) return;
-    if (match) {
-      schemeStatus.textContent = `Exact match: ${match.id}. Gallery usage and duplicates are calculated automatically.`;
-      schemeStatus.className = "scheme-status matched";
-    } else {
+
+    if (!match) {
       schemeStatus.textContent = "No exact Splendor scheme match. This card is treated as manually configured.";
       schemeStatus.className = "scheme-status unmatched";
+      return;
+    }
+
+    const otherCards = (match.used_by ?? []).filter((cardId) => cardId !== currentCardId);
+    if (otherCards.length > 0) {
+      schemeStatus.textContent = `Duplicate: ${match.id} is also used by ${otherCards.join(", ")}. Fix the duplicate before finalizing the card.`;
+      schemeStatus.className = "scheme-status duplicate";
+    } else {
+      schemeStatus.textContent = `Exact match: ${match.id}. This scheme is currently unique.`;
+      schemeStatus.className = "scheme-status matched";
     }
   }
 
