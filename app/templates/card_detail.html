@@ -42,7 +42,9 @@
           {% for tier in [1, 2, 3] %}
             <optgroup label="Tier {{ tier }}">
               {% for scheme in schemes if scheme.tier == tier %}
-                <option value="{{ scheme.id }}" {% if matched_scheme and matched_scheme.id == scheme.id %}selected{% endif %}>{{ scheme.id }} · {{ scheme.source_color|capitalize }} · {{ scheme.influence }} pt</option>
+                <option value="{{ scheme.id }}" {% if matched_scheme and matched_scheme.id == scheme.id %}selected{% endif %}>
+                  {{ scheme.resource_label }} · {{ scheme.id }} · {{ scheme.influence }} pt{% if scheme.used_by %} — used by {{ scheme.used_by | join(', ') }}{% endif %}
+                </option>
               {% endfor %}
             </optgroup>
           {% endfor %}
@@ -88,7 +90,7 @@
       <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if png_exists %}Regenerate PNG{% else %}Generate PNG{% endif %}</button></form>
       <p class="hint">Preview below is live HTML/CSS. Drag the artwork in the preview or use X/Y and scale, then save the card.</p>
     {% else %}
-      <p class="hint">Choose a Splendor scheme to fill tier, influence, material, and costs automatically. You can still edit them manually; an exact scheme match is calculated from the saved values.</p>
+      <p class="hint">Choose a Splendor scheme to fill tier, influence, material, and costs automatically. You can still edit them manually; an exact scheme match is calculated from the current values.</p>
     {% endif %}
   </section>
 
