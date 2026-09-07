@@ -17,6 +17,7 @@
           <div><dt>Class</dt><dd>{{ card.operator_class }}</dd></div>
           <div><dt>Influence</dt><dd>{{ card.influence }}</dd></div>
           <div><dt>Operator material</dt><dd>{{ card.resource_type_label }}</dd></div>
+          <div><dt>Splendor scheme</dt><dd>{% if matched_scheme %}{{ matched_scheme.id }}{% else %}None{% endif %}</dd></div>
           <div><dt>Originium</dt><dd>{% if card.tier == 3 %}Automatic Tier 3 design bonus{% else %}None{% endif %}</dd></div>
           <div><dt>Artwork</dt><dd>{{ card.artwork }}</dd></div>
           <div><dt>Background</dt><dd>{{ card.background_color }}</dd></div>
@@ -36,6 +37,17 @@
           <input type="hidden" name="id" value="{{ card.id }}">
         {% endif %}
         <label>Name<input name="name" value="{{ card.name if card else '' }}" required></label>
+        <label class="scheme-field">Splendor scheme<select id="scheme-selector" name="scheme_id">
+          <option value="">Manual / no exact scheme</option>
+          {% for tier in [1, 2, 3] %}
+            <optgroup label="Tier {{ tier }}">
+              {% for scheme in schemes if scheme.tier == tier %}
+                <option value="{{ scheme.id }}" {% if matched_scheme and matched_scheme.id == scheme.id %}selected{% endif %}>{{ scheme.id }} · {{ scheme.source_color|capitalize }} · {{ scheme.influence }} pt</option>
+              {% endfor %}
+            </optgroup>
+          {% endfor %}
+        </select></label>
+        <p id="scheme-status" class="scheme-status" aria-live="polite"></p>
         <label>Tier<select name="tier"><option value="1" {% if not card or card.tier == 1 %}selected{% endif %}>1</option><option value="2" {% if card and card.tier == 2 %}selected{% endif %}>2</option><option value="3" {% if card and card.tier == 3 %}selected{% endif %}>3</option></select></label>
         <label>Class<input name="operator_class" value="{{ card.operator_class if card else '' }}" placeholder="Sniper" required></label>
         <label>Influence<input name="influence" type="number" min="0" value="{{ card.influence if card else 0 }}" required></label>
@@ -76,7 +88,7 @@
       <form action="/card/{{ card.id }}/generate" method="post"><button type="submit">{% if png_exists %}Regenerate PNG{% else %}Generate PNG{% endif %}</button></form>
       <p class="hint">Preview below is live HTML/CSS. Drag the artwork in the preview or use X/Y and scale, then save the card.</p>
     {% else %}
-      <p class="hint">Choose an artwork to preview it immediately. The image will be saved when you create the card.</p>
+      <p class="hint">Choose a Splendor scheme to fill tier, influence, material, and costs automatically. You can still edit them manually; an exact scheme match is calculated from the saved values.</p>
     {% endif %}
   </section>
 
@@ -85,5 +97,6 @@
     <div class="card-viewport">{% if is_new and preview_card_id %}<iframe title="New card preview" src="/render/{{ preview_card_id }}"></iframe>{% elif not is_new %}<iframe title="{{ card.name }} card preview" src="/render/{{ card.id }}"></iframe>{% endif %}</div>
   </section>
 </main>
+<script id="scheme-data" type="application/json">{{ schemes | tojson }}</script>
 <script src="{{ url_for('static', path='js/card-editor.js') }}"></script>
 {% endblock %}
