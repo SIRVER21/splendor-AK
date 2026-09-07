@@ -52,22 +52,26 @@ def save_uploaded_artwork(card_id: str, data_url: str) -> str:
 async def home(request: Request):
     cards = loader.list_cards()
     usage = scheme_catalog.usage(cards)
-    gallery_cards = [
-        {
-            "card": card,
-            "png_exists": (GENERATED_DIR / f"{card.id}.png").is_file(),
-            "png_url": f"/generated/{card.id}.png",
-            "scheme": scheme_catalog.match(card),
-            "scheme_duplicate": bool(scheme_catalog.match(card) and len(usage[scheme_catalog.match(card).id]) > 1),
-        }
-        for card in cards
-    ]
+    gallery_cards = []
+    for card in cards:
+        scheme = scheme_catalog.match(card)
+        used_by = usage.get(scheme.id, []) if scheme else []
+        gallery_cards.append(
+            {
+                "card": card,
+                "png_exists": (GENERATED_DIR / f"{card.id}.png").is_file(),
+                "png_url": f"/generated/{card.id}.png",
+                "scheme": scheme,
+                "scheme_duplicate": len(used_by) > 1,
+            }
+        )
     return templates.TemplateResponse(request, "gallery.html", {"cards": gallery_cards})
 
 
 @app.get("/card/new", include_in_schema=False)
 async def new_card(request: Request):
     cards = loader.list_cards()
+    usage = scheme_catalog.usage(cards)
     preview_card_id = cards[0].id if cards else None
     return templates.TemplateResponse(
         request,
@@ -78,8 +82,9 @@ async def new_card(request: Request):
             "png_exists": False,
             "next_card_id": loader.next_card_id(),
             "preview_card_id": preview_card_id,
-            "schemes": scheme_catalog.as_dicts(),
+            "schemes": scheme_catalog.as_dicts(usage),
             "matched_scheme": None,
+            "current_card_id": None,
         },
     )
 
@@ -87,6 +92,8 @@ async def new_card(request: Request):
 @app.get("/card/{card_id}", include_in_schema=False)
 async def card_detail(request: Request, card_id: str):
     card = get_card_or_404(card_id)
+    usage = scheme_catalog.usage(loader.list_cards())
+    matched_scheme = scheme_catalog.match(card)
     return templates.TemplateResponse(
         request,
         "card_detail.html",
@@ -94,8 +101,9 @@ async def card_detail(request: Request, card_id: str):
             "card": card,
             "is_new": False,
             "png_exists": (GENERATED_DIR / f"{card.id}.png").is_file(),
-            "schemes": scheme_catalog.as_dicts(),
-            "matched_scheme": scheme_catalog.match(card),
+            "schemes": scheme_catalog.as_dicts(usage),
+            "matched_scheme": matched_scheme,
+            "current_card_id": card.id,
         },
     )
 
