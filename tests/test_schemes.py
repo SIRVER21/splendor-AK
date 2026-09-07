@@ -63,3 +63,7 @@ def test_scheme_usage_marks_duplicates() -> None:
 
     usage = catalog.usage(cards)
     assert usage[scheme.id] == ["op_001", "op_002"]
+
+    scheme_data = catalog.as_dicts(usage)[0]
+    assert scheme_data["resource_label"] == "Intelligence"
+    assert scheme_data["used_by"] == ["op_001", "op_002"]
