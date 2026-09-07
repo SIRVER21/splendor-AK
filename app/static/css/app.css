@@ -94,6 +94,17 @@ button:hover, .primary-action:hover { background: #ffa084; transform: translateY
 .card-viewport { width: 482px; height: 668px; overflow: hidden; box-shadow: 0 24px 80px #000a; }
 .preview-panel iframe { border: 0; width: 750px; height: 1039px; transform: scale(0.6427); transform-origin: top left; background: transparent; }
 
+.scheme-field select { min-width: 0; }
+.scheme-status {
+  margin: -.25rem 0 .75rem;
+  color: #a9aabb;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+.scheme-status.matched { color: #7ee3ba; }
+.scheme-status.unmatched { color: #f6bd6a; }
+.scheme-status.duplicate { color: #ff7777; }
+
 /* ---------------------------------------------------------
    CARD CATALOG
    --------------------------------------------------------- */
@@ -209,6 +220,31 @@ button:hover, .primary-action:hover { background: #ffa084; transform: translateY
   color: #f6f2e9;
   font-size: 1.35rem;
   font-weight: 600;
+}
+
+.scheme-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin: .45rem 0 0;
+  padding: .2rem .5rem;
+  border: 1px solid #4a4c5d;
+  border-radius: 999px;
+  color: #c9c7d5;
+  font: 500 .72rem "DM Mono", monospace;
+}
+
+.scheme-badge strong { color: #f6f2e9; }
+.scheme-none { color: #7f8190; border-color: #363846; }
+.scheme-warning {
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #d94747;
+  color: #fff;
+  font: 700 .72rem/1 Outfit, sans-serif;
 }
 
 .gallery-actions {

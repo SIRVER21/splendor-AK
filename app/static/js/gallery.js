@@ -7,7 +7,9 @@ if (search) {
     const query = search.value.trim().toLowerCase();
     let visible = 0;
     for (const card of cards) {
-      const matches = card.dataset.cardId.includes(query) || card.dataset.cardName.includes(query);
+      const matches = card.dataset.cardId.includes(query)
+        || card.dataset.cardName.includes(query)
+        || card.dataset.cardScheme.includes(query);
       card.hidden = !matches;
       if (matches) visible += 1;
     }

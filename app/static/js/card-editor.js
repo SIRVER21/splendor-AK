@@ -2,8 +2,13 @@ const editor = document.querySelector("#card-editor");
 
 if (editor) {
   const isCreate = editor.dataset.cardMode === "create";
+  const currentCardId = editor.dataset.cardId ?? null;
   const preview = document.querySelector(".preview-panel iframe");
   const mouseToggle = document.querySelector("#artwork-mouse-enabled");
+  const schemeSelector = document.querySelector("#scheme-selector");
+  const schemeStatus = document.querySelector("#scheme-status");
+  const schemeDataElement = document.querySelector("#scheme-data");
+  const schemes = schemeDataElement ? JSON.parse(schemeDataElement.textContent) : [];
   const resources = ["lmd", "intelligence", "logistics", "medical", "technology"];
   const labels = { lmd: "LMD", intelligence: "Intelligence", logistics: "Logistics", medical: "Medical", technology: "Technology" };
   const number = (name) => Number(editor.elements[name].value);
@@ -25,6 +30,61 @@ if (editor) {
     const affinity = card.querySelector(".resource-affinity");
     if (affinity) affinity.textContent = labels[resource] ?? resource;
   }
+
+  function cardMatchesScheme(scheme) {
+    if (!scheme) return false;
+    if (number("tier") !== scheme.tier || number("influence") !== scheme.influence) return false;
+    if (editor.elements.resource_type.value !== scheme.resource_type) return false;
+    return resources.every((resource) => number(`cost_${resource}`) === scheme.cost[resource]);
+  }
+
+  function findMatchingScheme() {
+    return schemes.find(cardMatchesScheme) ?? null;
+  }
+
+  function updateSchemeStatus() {
+    const match = findMatchingScheme();
+    if (schemeSelector) schemeSelector.value = match?.id ?? "";
+    if (!schemeStatus) return;
+
+    if (!match) {
+      schemeStatus.textContent = "No exact Splendor scheme match. This card is treated as manually configured.";
+      schemeStatus.className = "scheme-status unmatched";
+      return;
+    }
+
+    const otherCards = (match.used_by ?? []).filter((cardId) => cardId !== currentCardId);
+    if (otherCards.length > 0) {
+      schemeStatus.textContent = `Duplicate: ${match.id} is also used by ${otherCards.join(", ")}. Fix the duplicate before finalizing the card.`;
+      schemeStatus.className = "scheme-status duplicate";
+    } else {
+      schemeStatus.textContent = `Exact match: ${match.id}. This scheme is currently unique.`;
+      schemeStatus.className = "scheme-status matched";
+    }
+  }
+
+  function applyScheme(schemeId) {
+    const scheme = schemes.find((item) => item.id === schemeId);
+    if (!scheme) {
+      updateSchemeStatus();
+      return;
+    }
+    editor.elements.tier.value = scheme.tier;
+    editor.elements.influence.value = scheme.influence;
+    editor.elements.resource_type.value = scheme.resource_type;
+    for (const resource of resources) {
+      editor.elements[`cost_${resource}`].value = scheme.cost[resource];
+    }
+    syncPreview();
+    updateSchemeStatus();
+  }
+
+  schemeSelector?.addEventListener("change", () => applyScheme(schemeSelector.value));
+  ["tier", "influence", "resource_type", ...resources.map((resource) => `cost_${resource}`)].forEach((name) => {
+    editor.elements[name].addEventListener("input", updateSchemeStatus);
+    editor.elements[name].addEventListener("change", updateSchemeStatus);
+  });
+  updateSchemeStatus();
 
   function setupDragging() {
     const image = preview?.contentDocument?.querySelector(".art img");

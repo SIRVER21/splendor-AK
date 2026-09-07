@@ -6,7 +6,7 @@
     <div>
       <p class="eyebrow">CARD GALLERY</p>
       <h1>Cards</h1>
-      <p class="subtle">Browse cards by ID or name and generate PNGs when needed.</p>
+      <p class="subtle">Browse cards by ID, name, or Splendor scheme and generate PNGs when needed.</p>
     </div>
     <div class="gallery-header-actions">
       <a class="primary-action" href="/card/new">+ New card</a>
@@ -16,13 +16,13 @@
 
   <label class="search-box" for="gallery-search">
     <span>Search cards</span>
-    <input id="gallery-search" type="search" placeholder="Search by name or ID, e.g. Exusiai or op_001" autocomplete="off">
+    <input id="gallery-search" type="search" placeholder="Search by name, ID, or scheme, e.g. Exusiai, op_001, or op_01" autocomplete="off">
   </label>
 
   <section class="gallery-list" aria-label="Cards">
     {% for item in cards %}
       {% set card = item.card %}
-      <article class="gallery-card resource-{{ card.resource_type }}" data-card-id="{{ card.id }}" data-card-name="{{ card.name | lower }}">
+      <article class="gallery-card resource-{{ card.resource_type }}" data-card-id="{{ card.id }}" data-card-name="{{ card.name | lower }}" data-card-scheme="{{ item.scheme.id if item.scheme else '' }}">
         <a class="gallery-preview" href="/card/{{ card.id }}" aria-label="Open {{ card.name }}">
           {% if item.png_exists %}
             <img src="{{ item.png_url }}" alt="{{ card.name }} generated card">
@@ -36,6 +36,14 @@
         <div class="gallery-meta">
           <p class="card-id">{{ card.id }}</p>
           <h2>{{ card.name }}</h2>
+          {% if item.scheme %}
+            <p class="scheme-badge" title="Exact match for original Splendor parameters">
+              Scheme <strong>{{ item.scheme.id }}</strong>
+              {% if item.scheme_duplicate %}<span class="scheme-warning" title="This scheme is used by multiple cards" aria-label="Duplicate scheme">!</span>{% endif %}
+            </p>
+          {% else %}
+            <p class="scheme-badge scheme-none">No exact scheme</p>
+          {% endif %}
         </div>
         <div class="gallery-actions">
           <a class="secondary-action" href="/card/{{ card.id }}">Edit</a>
