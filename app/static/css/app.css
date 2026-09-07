@@ -43,14 +43,31 @@ h1 {
 .hint { color: #a9aabb; line-height: 1.55; }
 
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   margin-bottom: 1.5rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #55586b;
+  border-radius: 5px;
+  background: rgba(27, 28, 39, .82);
   color: #dec0ff;
-  font-size: .9rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   text-decoration: none;
+  transition: border-color .15s, background .15s, transform .15s;
 }
 
-.back-link:hover { text-decoration: underline; }
+.back-link:hover {
+  border-color: #8f78ad;
+  background: #242533;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.editor-back {
+  margin: 1.5rem 0 0;
+}
 
 .card-data h2 {
   margin: 2rem 0 0;
