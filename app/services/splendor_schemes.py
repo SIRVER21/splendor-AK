@@ -12,6 +12,13 @@ SOURCE_TO_RESOURCE = {
     "red": "logistics",
     "white": "technology",
 }
+RESOURCE_LABELS = {
+    "lmd": "LMD",
+    "intelligence": "Intelligence",
+    "logistics": "Logistics",
+    "medical": "Medical",
+    "technology": "Technology",
+}
 
 
 @dataclass(frozen=True)
@@ -31,14 +38,16 @@ class SplendorScheme:
             and all(getattr(card.cost, resource) == amount for resource, amount in self.cost.items())
         )
 
-    def as_dict(self) -> dict:
+    def as_dict(self, used_by: list[str] | None = None) -> dict:
         return {
             "id": self.id,
             "tier": self.tier,
             "influence": self.influence,
             "resource_type": self.resource_type,
+            "resource_label": RESOURCE_LABELS[self.resource_type],
             "cost": self.cost,
             "source_color": self.source_color,
+            "used_by": used_by or [],
         }
 
 
@@ -84,12 +93,6 @@ class SplendorSchemeCatalog:
     def schemes(self) -> tuple[SplendorScheme, ...]:
         return self._schemes
 
-    def as_dicts(self) -> list[dict]:
-        return [scheme.as_dict() for scheme in self._schemes]
-
-    def match(self, card: Card) -> SplendorScheme | None:
-        return next((scheme for scheme in self._schemes if scheme.matches(card)), None)
-
     def usage(self, cards: list[Card]) -> dict[str, list[str]]:
         result = {scheme.id: [] for scheme in self._schemes}
         for card in cards:
@@ -97,3 +100,10 @@ class SplendorSchemeCatalog:
             if scheme is not None:
                 result[scheme.id].append(card.id)
         return result
+
+    def as_dicts(self, usage: dict[str, list[str]] | None = None) -> list[dict]:
+        usage = usage or {scheme.id: [] for scheme in self._schemes}
+        return [scheme.as_dict(usage.get(scheme.id, [])) for scheme in self._schemes]
+
+    def match(self, card: Card) -> SplendorScheme | None:
+        return next((scheme for scheme in self._schemes if scheme.matches(card)), None)
